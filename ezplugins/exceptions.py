@@ -32,7 +32,7 @@ class EZPluginException(Exception):
 
 class EZPluginMethodNotFoundException(EZPluginException):
     """
-    Exception raised when a plugin method or plugin is not found during a :obj:`ezplugins.manager.EZPluginManager.methods` call.
+    Exception raised when a plugin method or plugin is not found during a :meth:`ezplugins.manager.EZPluginManager.methods` call.
 
     Parameters
     ----------
@@ -49,7 +49,7 @@ class EZPluginMethodNotFoundException(EZPluginException):
 
     def __init__(self, method_name: Optional[str], plugin_name: Optional[str]):
         """
-        Exception raised when a plugin method or plugin is not found during a :obj:`EZPluginManager.methods` call.
+        Exception raised when a plugin method or plugin is not found during a :meth:`EZPluginManager.methods` call.
 
         Parameters
         ----------

@@ -1,8 +1,8 @@
-ezplugins package
-=================
+The ezplugins package
+=====================
 
-Submodules
-----------
+Package Modules
+---------------
 
 ezplugins.decorators module
 ---------------------------

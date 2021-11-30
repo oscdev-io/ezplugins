@@ -39,10 +39,10 @@ setup(
     version=VERSION,
     author="Nigel Kukard",
     author_email="nkukard@LBSD.net",
-    description="EZPlugins plugin handling framework.",
+    description="EZPlugins is an easy to use plugin API framework.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    url="https://oscdev.io/software/allworldit/ezplugins",
+    url="https://oscdev.io/software/ezplugins",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",

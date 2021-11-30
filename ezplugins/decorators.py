@@ -52,7 +52,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     to make things easier, plugins can also be called using ``#ClassName``, keep in mind though that one can have two classes with
     the same name in different modules.
 
-    See the :obj:`ezplugins.decorators.ezplugin_metadata` decorator for specifying a plugin alias.
+    See the :func:`ezplugins.decorators.ezplugin_metadata` decorator for specifying a plugin alias.
 
     """
 
@@ -66,7 +66,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
 
 def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
     """
-    Decorate a class as being a loadable plugin with metadata. See :obj:`ezplugins.decorators.ezplugin` for more information.
+    Decorate a class as being a loadable plugin with metadata. See :data:`ezplugins.decorators.ezplugin` for more information.
 
     Classes can be decorated and additional metadata added like this::
 

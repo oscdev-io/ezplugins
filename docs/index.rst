@@ -10,6 +10,7 @@ Welcome to EZPlugins documentation!
    :maxdepth: 4
    :caption: Contents:
 
+   quickstart
    ezplugins
 
 

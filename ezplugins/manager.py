@@ -40,7 +40,7 @@ class EZPluginModule:
 
     If there is no plugins and no load exception, the module will not be added to the modules list.
 
-    See :obj:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
+    See :attr:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ class EZPluginModule:
 
         If there is no plugins and no load exception, the module will not be added to the modules list.
 
-        See :obj:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
+        See :attr:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
 
         Parameters
         ----------
@@ -165,9 +165,9 @@ class EZPluginManager:
     objects are used when methods are run.
 
     Plugins are mapped using their fully qualified name ``full.module.name#ClassName`` and their class name ``#ClassName``. Aliases
-    can be created used for grouping or easier reference using :obj:`ezplugins.decorators.ezplugin_metadata`.
+    can be created used for grouping or easier reference using :func:`ezplugins.decorators.ezplugin_metadata`.
 
-    For calling plugin methods see :obj:`ezplugins.manager.EZPluginManager.methods`.
+    For calling plugin methods see :meth:`ezplugins.manager.EZPluginManager.methods`.
 
     Parameters
     ----------
@@ -216,7 +216,7 @@ class EZPluginManager:
                 result = method.run("param1", "param2")
                 print(f"RESULT: {result}")
 
-        As you can see in the above examples we have a ``_`` in the `for`, this is the :obj:`ezplugins.plugin.EZPlugin` plugin
+        As you can see in the above examples we have a ``_`` in the `for`, this is the :class:`ezplugins.plugin.EZPlugin` plugin
         object which we didn't need::
 
             # Call the method some_func in each plugin
@@ -366,7 +366,7 @@ class EZPluginManager:
     @property
     def modules(self) -> List[EZPluginModule]:
         """
-        List of :obj:`ezplugins.manager.EZPluginModule` modules loaded.
+        List of :class:`ezplugins.manager.EZPluginModule` modules loaded.
 
         The purpose of this method would potentially be to see if a module failed load using something like the below::
 

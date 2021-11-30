@@ -30,7 +30,7 @@ class EZPluginMethod:
     """
     Representation of a plugin method. This class is designed to be instantiated during plugin load.
 
-    See :obj:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
+    See :meth:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
 
     Parameters
     ----------
@@ -45,7 +45,7 @@ class EZPluginMethod:
         """
         Representation of a plugin method. This class is designed to be instantiated during plugin load.
 
-        See :obj:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
+        See :meth:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
 
         Parameters
         ----------
@@ -91,7 +91,7 @@ class EZPlugin:
     """
     Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-    See :obj:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
+    See :attr:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
 
     Parameters
     ----------
@@ -111,7 +111,7 @@ class EZPlugin:
         """
         Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-        See :obj:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
+        See :attr:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
 
         Parameters
         ----------
