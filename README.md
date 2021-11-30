@@ -1,3 +1,6 @@
+[![pipeline status](https://oscdev.io/software/ezplugins/badges/master/pipeline.svg)](https://oscdev.io/software/ezplugins/commits/master)
+[![coverage report](https://oscdev.io/software/ezplugins/badges/master/coverage.svg)](https://oscdev.io/software/ezplugins/commits/master)
+
 # EZPlugins
 
 EZPlugins is an easy to use plugin API framework with a great deal of flexibility.
