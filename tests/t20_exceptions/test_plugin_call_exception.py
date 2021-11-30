@@ -87,7 +87,11 @@ class TestPluginCallException(BaseTest):
             for method, _ in self.data["plugins"].methods(where_name="test_func2"):
                 method.run()
 
-        assert "No EZPlugin method(s) found" == str(excinfo.value), "Exception raised does not match"
+        assert ("No EZPlugin method(s) found", None, "test_func2") == (
+            str(excinfo.value),
+            excinfo.value.plugin_name,
+            excinfo.value.method_name,
+        ), "Exception raised does not match"
 
     def test_call_no_plugin(self) -> None:
         """Test calling a method from a specific plugin that doesn't exist."""
@@ -96,4 +100,8 @@ class TestPluginCallException(BaseTest):
             for method, _ in self.data["plugins"].methods(where_name="test_func1", from_plugin="#DoesNotExist"):
                 method.run()
 
-        assert "No EZPlugin method(s) found" == str(excinfo.value), "Exception raised does not match"
+        assert ("No EZPlugin method(s) found", "#DoesNotExist", "test_func1") == (
+            str(excinfo.value),
+            excinfo.value.plugin_name,
+            excinfo.value.method_name,
+        ), "Exception raised does not match"
