@@ -1,5 +1,5 @@
-[![pipeline status](https://oscdev.io/software/ezplugins/badges/master/pipeline.svg)](https://oscdev.io/software/ezplugins/commits/master)
-[![coverage report](https://oscdev.io/software/ezplugins/badges/master/coverage.svg)](https://oscdev.io/software/ezplugins/commits/master)
+[![pipeline status](https://gitlab.oscdev.io/software/ezplugins/badges/master/pipeline.svg)](https://gitlab.oscdev.io/software/ezplugins/commits/master)
+[![coverage report](https://gitlab.oscdev.io/software/ezplugins/badges/master/coverage.svg)](https://gitlab.oscdev.io/software/ezplugins/commits/master)
 
 # EZPlugins
 
