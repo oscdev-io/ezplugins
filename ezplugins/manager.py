@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugins collection handling."""
+"""EZPlugins manager."""
 
 import importlib
 import inspect
@@ -38,24 +38,14 @@ class EZPluginModule:
     """
     Representation of a module within the plugin package hierarchy, which may contain plugins.
 
+    If there is no plugins and no load exception, the module will not be added to the modules list.
+
+    See :obj:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
+
     Parameters
     ----------
     module_name : str
         Name of the module.
-
-    Attributes
-    ----------
-    module : ModuleType
-        Imported module.
-
-    module_name : str
-        Imported modules name.
-
-    plugins : List[EZPlugin]
-        List of plugins loaded from this module.
-
-    load_exception : Optional[Exception]
-        Exception if one was raised during load.
 
     """
 
@@ -68,24 +58,14 @@ class EZPluginModule:
         """
         Representation of a module within the plugin package hierarchy, which may contain plugins.
 
+        If there is no plugins and no load exception, the module will not be added to the modules list.
+
+        See :obj:`ezplugins.manager.EZPluginManager.modules` for how to get a list of loaded modules.
+
         Parameters
         ----------
         module_name : str
             Name of the module.
-
-        Attributes
-        ----------
-        module : ModuleType
-            Imported module.
-
-        module_name : str
-            Imported modules name.
-
-        plugins : List[EZPlugin]
-            List of plugins loaded from this module.
-
-        load_exception : Optional[Exception]
-            Exception if one was raised during load.
 
         """
 
@@ -121,7 +101,8 @@ class EZPluginModule:
 
         Returns
         -------
-        Optional[ModuleType] : A module with type ModuleType that was imported (if it was imported, or None).
+        Optional[ModuleType]
+            Module that was imported (if it was imported, or None).
 
         """
         return self._module
@@ -133,7 +114,8 @@ class EZPluginModule:
 
         Returns
         -------
-        A module str containing the module name.
+        str
+            Module name.
 
         """
         return self._module_name
@@ -145,7 +127,8 @@ class EZPluginModule:
 
         Returns
         -------
-        A list of instantiated EZPlugin's that represent the plugin objects that were instantiated.
+        List[EZPlugin]
+            List of instantiated EZPlugin's that represent the plugin objects that were instantiated.
 
         """
         return self._plugins
@@ -157,7 +140,8 @@ class EZPluginModule:
 
         Returns
         -------
-        An exception raised during load if any, or None otherwise.
+        Optional[Exception]
+            An exception raised during load if any, or None otherwise.
 
         """
         return self._load_exception
@@ -165,13 +149,25 @@ class EZPluginModule:
 
 class EZPluginManager:
     """
-    Initialize EZPluginsCollection using a list of plugin base packages.
+    The EZPluginManager is responsible for both loading and returning plugin methods for execution.
 
-    Plugins are mapped with the below names:
-        full.module.name#ClassName
-        #ClassName
+    Plugins are loaded by specifying the plugin package names. These packages are recursed and all classes decorated as being
+    EZPlugins are instantiated::
 
-    Calling a plugin by name where multiple names match will result in all plugins being called.
+        import ezplugins
+
+        # Load plugins from mypackage.plugins and "mypackage2.plugins"
+        plugin_manager = ezplugins.EZPluginManager(["mypackage.plugins", "mypackage2.plugins"])
+
+    Plugins are loaded from packages which are looked up within ``PYTHONPATH``.
+
+    Packages are recursed and all plugins are loaded by instantiating the classes marked as plugins. The resulting instantiated
+    objects are used when methods are run.
+
+    Plugins are mapped using their fully qualified name ``full.module.name#ClassName`` and their class name ``#ClassName``. Aliases
+    can be created used for grouping or easier reference using :obj:`ezplugins.decorators.ezplugin_metadata`.
+
+    For calling plugin methods see :obj:`ezplugins.manager.EZPluginManager.methods`.
 
     Parameters
     ----------
@@ -213,6 +209,30 @@ class EZPluginManager:
         """
         Return a generator used to iterate over plugin methods with a specific name and optionally from a specific plugin.
 
+        An example of running all ``some_func`` methods in all plugins can be found below::
+
+            # Call the method some_func in each plugin
+            for method, _ in plugin_manager.methods(with_name="some_func"):
+                result = method.run("param1", "param2")
+                print(f"RESULT: {result}")
+
+        As you can see in the above examples we have a ``_`` in the `for`, this is the :obj:`ezplugins.plugin.EZPlugin` plugin
+        object which we didn't need::
+
+            # Call the method some_func in each plugin
+            for method, plugin in plugin_manager.methods(with_name="some_func"):
+                result = method.run("param1", "param2")
+                print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")
+
+        One can also call every single method marked as an EZPlugin method in all plugins using the following::
+
+            # Call the method some_func in each plugin
+            for method, _ in plugin_manager.methods():
+                result = method.run("param1", "param2")
+                print(f"RESULT: {result}")
+
+        Calling a plugin by name where multiple names match based on class or alias will result in all plugins being called.
+
         Parameters
         ----------
         where_name : Optional[str]
@@ -223,7 +243,8 @@ class EZPluginManager:
 
         Returns
         -------
-        A generator that provides tuples in the format of (EZPluginMethod, EZPlugin)
+        Iterator[Tuple[EZPluginMethod, EZPlugin]]
+            A generator that provides tuples in the format of (EZPluginMethod, EZPlugin).
 
         """
 
@@ -249,7 +270,7 @@ class EZPluginManager:
 
     def get_plugin(self, plugin_name: str) -> set[EZPlugin]:
         """
-        Return plugin with a given name.
+        Return a plugin with a given name.
 
         This will match on the fully qualified plugin name, the class name and aliase.
 
@@ -260,7 +281,8 @@ class EZPluginManager:
 
         Returns
         -------
-        Set of EZPlugin objects which matches the criteria.
+        set[EZPlugin]
+            Set of EZPlugin objects which matches the criteria.
 
         """
 
@@ -344,11 +366,18 @@ class EZPluginManager:
     @property
     def modules(self) -> List[EZPluginModule]:
         """
-        Property containing the list of modules loaded.
+        List of :obj:`ezplugins.manager.EZPluginModule` modules loaded.
+
+        The purpose of this method would potentially be to see if a module failed load using something like the below::
+
+            for module in plugin_manager.modules:
+                if module.load_exception:
+                    print(f"Module {module.name} failed load: {module.load_exception}")
 
         Returns
         -------
-        A list of modules loaded during the course of finding plugins.
+        List[EZPluginModule]
+            Modules loaded during the course of finding plugins.
 
         """
 
@@ -361,7 +390,8 @@ class EZPluginManager:
 
         Returns
         -------
-        A List[EZPlugin] of all plugins loaded.
+        List[EZPlugin]
+            List of all plugins loaded.
 
         """
 

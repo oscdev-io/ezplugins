@@ -21,55 +21,57 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugin exceptions."""
+"""EZPlugins exceptions."""
 
 from typing import Optional
 
 
 class EZPluginException(Exception):
-    """Plugin-related exception."""
+    """EZPlugin related exception base class."""
 
 
 class EZPluginMethodNotFoundException(EZPluginException):
     """
-    Exception raised when a plugin method or plugin is not found during a plugin_manager.methods() call.
+    Exception raised when a plugin method or plugin is not found during a :obj:`ezplugins.manager.EZPluginManager.methods` call.
 
     Parameters
     ----------
     method_name : Optional[str]
-        Method name that was specified.
+        Method name.
 
     plugin_name : Optional[str]
-        Plugin name that was specified.
-
-    Attributes
-    ----------
-    method_name : Optional[str]
-        Method name that was specified.
-
-    plugin_name : Optional[str]
-        Plugin name that was specified.
+        Plugin name.
 
     """
 
-    plugin_name: Optional[str]
-    method_name: Optional[str]
+    _plugin_name: Optional[str]
+    _method_name: Optional[str]
 
     def __init__(self, method_name: Optional[str], plugin_name: Optional[str]):
         """
-        Exception raised when a plugin method or plugin is not found during a plugin_manager.methods() call.
+        Exception raised when a plugin method or plugin is not found during a :obj:`EZPluginManager.methods` call.
 
         Parameters
         ----------
         method_name : Optional[str]
-            Method name that was specified.
+            Method name.
 
         plugin_name : Optional[str]
-            Plugin name that was specified.
+            Plugin name.
 
         """
 
         super().__init__("No EZPlugin method(s) found")
 
-        self.plugin_name = plugin_name
-        self.method_name = method_name
+        self._plugin_name = plugin_name
+        self._method_name = method_name
+
+    @property
+    def plugin_name(self) -> Optional[str]:
+        """Plugin name if one is available."""
+        return self._plugin_name
+
+    @property
+    def method_name(self) -> Optional[str]:
+        """Name of the method if one is available."""
+        return self._method_name

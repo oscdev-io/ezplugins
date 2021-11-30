@@ -1,6 +1,6 @@
 # EZPlugins
 
-EZPlugins is an easy to use plugin API.
+EZPlugins is an easy to use plugin API with a great deal of flexibility.
 
 # Quick Start
 

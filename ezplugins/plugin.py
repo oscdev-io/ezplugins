@@ -21,32 +21,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugin base class."""
+"""EZPlugins plugin classes."""
 
 from typing import Any, Callable, List, Optional
 
 
 class EZPluginMethod:
     """
-    Representation of a plugin method.
+    Representation of a plugin method. This class is designed to be instantiated during plugin load.
 
-    This class is designed to be instantiated during plugin load.
+    See :obj:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
 
     Parameters
     ----------
     method : Callable[..., Any]
         Plugin method.
-
-    Attributes
-    ----------
-    method : Callable[..., Any]
-        Plugin method.
-
-    name : str
-        Plugin method name.
-
-    order : int
-        Plugin call order. Methods are called in order of lowest to highest.
 
     """
 
@@ -54,25 +43,14 @@ class EZPluginMethod:
 
     def __init__(self, method: Callable[..., Any]) -> None:
         """
-        Representation of a plugin method.
+        Representation of a plugin method. This class is designed to be instantiated during plugin load.
 
-        This class is designed to be instantiated during plugin load.
+        See :obj:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
 
         Parameters
         ----------
         method : Callable[..., Any]
             Plugin method.
-
-        Attributes
-        ----------
-        method : Callable[..., Any]
-            Plugin method.
-
-        name : str
-            Plugin method name.
-
-        order : int
-            Plugin call order. Methods are called in order of lowest to highest.
 
         """
 
@@ -111,31 +89,14 @@ class EZPluginMethod:
 
 class EZPlugin:
     """
-    Representation of the instantiated plugin.
+    Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-    This class is designed to be instantiated during plugin load.
+    See :obj:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
 
     Parameters
     ----------
     obj : object
         Plugin object.
-
-    Attributes
-    ----------
-    obj : object
-        Plugin object.
-
-    name : str
-        Plugin name.
-
-    path : str
-        Plugin module path.
-
-    fqn : str
-        Fully qualified name. ie. Concatenated path+name.
-
-    alias : Optional[str]
-        Plugin alias, if specified.
 
     """
 
@@ -148,9 +109,9 @@ class EZPlugin:
 
     def __init__(self, obj: object):
         """
-        Class that represents the instantiated plugin.
+        Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-        This class is designed to be instantiated during plugin load.
+        See :obj:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
 
         Parameters
         ----------
