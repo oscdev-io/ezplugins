@@ -68,8 +68,9 @@ pages:
   script:
     # Create environment
     - pacman -Syu --noconfirm
-    - pacman -S --noconfirm python
+    - pacman -S --noconfirm make
     - pacman -S --noconfirm
+        python
         python-sphinx
         python-sphinx_rtd_theme
     # Build documentation
