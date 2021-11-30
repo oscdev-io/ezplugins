@@ -39,7 +39,7 @@ setup(
     version=VERSION,
     author="Nigel Kukard",
     author_email="nkukard@LBSD.net",
-    description="EZ Plugins plugin handling framework.",
+    description="EZPlugins plugin handling framework.",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://oscdev.io/software/allworldit/ezplugins",
