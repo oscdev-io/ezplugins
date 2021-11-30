@@ -5,6 +5,7 @@
 
 EZPlugins is an easy to use plugin API framework with a great deal of flexibility.
 
+
 # Installing
 
 EZPlugins can be simply installed by running:
