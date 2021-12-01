@@ -40,6 +40,7 @@ setup(
     author="Nigel Kukard",
     author_email="nkukard@LBSD.net",
     description="EZPlugins is an easy to use plugin framework.",
+    license="MIT",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://oscdev.io/software/ezplugins",
