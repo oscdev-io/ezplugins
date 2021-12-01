@@ -9,6 +9,7 @@ stages:
   - prepare_release
   - release
   - pages
+  - release_pypi
 
 test_job:
   stage: test
@@ -110,6 +111,23 @@ release_gitlab_package:
           --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
           dist/*.whl dist/*.tar.gz
 
+
+release_pypi:
+  stage: release_pypi
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - pacman -Syu --noconfirm
+    - pacman -S --noconfirm twine
+    - |
+        if [ -n "$PYPI_TOKEN" -a -n "$PYPI_USERNAME" ]; then
+          echo "Publishing to pypi..."
+          TWINE_PASSWORD="${PYPI_TOKEN}"" TWINE_USERNAME="${PYPI_USERNAME}" python -m twine upload dist/*.whl dist/*.tar.gz
+        else:
+          echo "NOT Publishing to pypi: No PYPI_TOKEN or PYPI_USERNAME"
+        fi
+
+        
 pages:
   stage: pages
   rules:
