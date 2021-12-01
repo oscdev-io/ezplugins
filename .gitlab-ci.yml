@@ -85,7 +85,7 @@ release_gitlab:
     for p in *.tar.* *.zip *.whl *SUMS.txt; do
       assets+=--assets-link="{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}"
     done
-    release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "${assets[@]}"
+  - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "${assets[@]}"
 
 
 release_gitlab_package:
