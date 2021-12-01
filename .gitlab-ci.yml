@@ -53,13 +53,10 @@ prepare_release:
   - if [ -n "$LAST_TAG" ]; then COMMIT_RANGE="$LAST_TAG..$CI_COMMIT_TAG"; else COMMIT_RANGE=""; fi
   # Output description file
   - echo "Automatic release based on tag $CI_COMMIT_TAG" > build/description.txt
+  - echo "# Changelog" >> build/description.txt
+  - echo '```' >> build/description.txt
   - git log --oneline --decorate --no-merges $COMMIT_RANGE >> build/description.txt
-  - echo -e "\n\n" >> build/description.txt
-  - echo "SHA512SUMS:" >> build/description.txt
-  - cat dist/SHA512SUMS.txt >> build/description.txt
-  - echo >> build/description.txt
-  - echo "B2SUMS:" >> build/description.txt
-  - cat dist/B2SUMS.txt >> build/description.txt
+  - echo '```' >> build/description.txt
   artifacts:
     expire_in: 1 day
     paths:
@@ -77,15 +74,15 @@ release_gitlab:
   - PACKAGE_REGISTRY_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${PACKAGE_VERSION}"
   - pacman -Syu --noconfirm release-cli
   # Grab description
-  - export DESCRIPTION=$(cat build/description.txt)
+  - DESCRIPTION=$(cat build/description.txt)
   # Build asset JSON
   - cd dist
-  - export ASSETS_LIST=$(
+  - ASSETS_LIST=$(
       for p in *.tar.* *.zip *.whl *SUMS.txt; do
         echo "{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}";
       done
     )
-  - if [ "$ASSETS" != ""]; then ASSETS=$(echo "--asset-links=["; paste -s -d, <<< "$ASSETS_LIST"; echo "]"); else ASSETS=""; fi
+  - if [ "$ASSETS_LIST" != ""]; then ASSETS=$(echo "--asset-links=["; paste -s -d, <<< "$ASSETS_LIST"; echo "]"); else ASSETS=""; fi
   - echo -e "ASSETS:\n$ASSETS"
   # Release
   - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "$ASSETS"
