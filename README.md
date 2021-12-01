@@ -12,7 +12,12 @@ EZPlugins can be simply installed by running:
 
     pip install ezplugins
 
-If you want to install from a source distribution, extract the tarball and run the following command:
+Or if you prefer the development branch, one could use:
+
+    pip install git+https://gitlab.oscdev.io/software/ezplugins.git
+
+If you want to install from a source distribution (extract the tarball first), or checked-out git repository run the following
+command:
 
     python setup.py install
 
