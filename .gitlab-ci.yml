@@ -78,6 +78,6 @@ pages:
 
   artifacts:
     paths:
-    - "build/sphinx/html"
+    - "build/sphinx/html/"
 
 
