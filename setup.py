@@ -43,7 +43,7 @@ setup(
     license="MIT",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
-    url="https://oscdev.io/software/ezplugins",
+    url="https://gitlab.oscdev.io/software/ezplugins",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Plugins",
