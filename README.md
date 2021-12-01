@@ -3,7 +3,7 @@
 
 # EZPlugins
 
-EZPlugins is an easy to use plugin API framework with a great deal of flexibility.
+EZPlugins is an easy to use plugin framework with a great deal of flexibility.
 
 
 # Installing
