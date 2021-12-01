@@ -82,21 +82,14 @@ release_gitlab:
   - DESCRIPTION=$(cat build/description.txt)
   # Build asset JSON
   - cd dist
-  - ASSETS_LIST=$(
-      for p in *.tar.* *.zip *.whl *SUMS.txt; do
-        echo "{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}";
-      done
-    )
+  - assets=()
   - |
-    if [ -n "$ASSETS_LIST" ]; then
-      ASSETS=$(paste -s -d, <<< "$ASSETS_LIST")
-      ASSETS="--assets-link=[$ASSETS]"
-    else
-      ASSETS=""
-    fi
-  - echo -e "ASSETS:\n$ASSETS"
+    for p in *.tar.* *.zip *.whl *SUMS.txt; do
+      assets+=("--assets-link={\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}")
+    done
+  - echo -e "ASSETS:\n$assets[@]"
   # Release
-  - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "$ASSETS"
+  - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "$assets[@]"
 
 
 release_gitlab_package:
