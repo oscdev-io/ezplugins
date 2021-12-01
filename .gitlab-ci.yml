@@ -36,30 +36,69 @@ prepare_release:
   script:
   - pacman -Syu --noconfirm
   - pacman -S --noconfirm git
-  - mkdir build
+  - pacman -S --noconfirm
+        python
+        python-sphinx
+        python-sphinx_rtd_theme
+        python-wheel
+  # Build docs and packages
+  - python setup.py sdist --formats=gztar,bztar,xztar,zip bdist_wheel build_sphinx
+  # Build compressed files and checksums
+  - cd dist
+  - sha512sum *.tar.* *.zip *.whl > SHA512SUM.txt
+  - b2sum *.tar.* *.zip *.whl > B2SUM.txt
+  - cd ..
   # Work out commit range for changelog
   - LAST_TAG=$(git tag --sort -version:refname | head -n2 | tail -n1)
   - if [ -n "$LAST_TAG" ]; then COMMIT_RANGE="$LAST_TAG..$CI_COMMIT_TAG"; else COMMIT_RANGE=""; fi
   # Output description file
   - echo "Automatic release based on tag $CI_COMMIT_TAG" > build/description.txt
   - git log --oneline --decorate --no-merges $COMMIT_RANGE >> build/description.txt
+  - echo -e "\n\n" >> build/description.txt
+  - echo "SHA512SUMS:" >> build/description.txt
+  - cat dist/SHA512SUMS.txt >> build/description.txt
+  - echo >> build/description.txt
+  - echo "B2SUMS:" >> build/description.txt
+  - cat dist/B2SUMS.txt >> build/description.txt
   artifacts:
     expire_in: 1 day
     paths:
     - build/
+    - dist/
 
-release:
+
+release_gitlab:
   stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+  - if: $CI_COMMIT_TAG
+  script:
+  # Work out variables
+  - PACKAGE_VERSION=$(echo "$CI_COMMIT_TAG" | sed -e 's/^v//')
+  - PACKAGE_REGISTRY_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${PACKAGE_VERSION}"
+  - pacman -Syu --noconfirm release-cli
+  # Grab description
+  - export DESCRIPTION=$(cat build/description.txt)
+  # Release
+  - cd dist
+  - assets=()
+  - |
+    for p in *.tar.* *.zip *.whl *SUM.txt; do
+      assets+=--assets-link="{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}"
+    done
+    release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "${assets[@]}"
+
+
+release_gitlab_package:
+  stage: release
   rules:
     - if: $CI_COMMIT_TAG
   script:
-    - echo "Release"
-  release:
-     name: 'Release $CI_COMMIT_TAG'
-     description: 'Automatic release based on tag $CI_COMMIT_TAG'
-     tag_name: '$CI_COMMIT_TAG'
-     ref: '$CI_COMMIT_TAG'
+    - pacman -Syu --noconfirm
+    - pacman -S --noconfirm twine
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token
+        python -m twine upload
+          --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+          dist/*.whl dist/*.tar.*
 
 pages:
   stage: pages
@@ -68,19 +107,9 @@ pages:
   script:
     # Create environment
     - pacman -Syu --noconfirm
-    - pacman -S --noconfirm make
-    - pacman -S --noconfirm
-        python
-        python-sphinx
-        python-sphinx_rtd_theme
-    # Build documentation
-    - python setup.py build_sphinx
     # Move documentation to public/
     # This is the only supported path in gitlab
     - mv build/sphinx/html public
-
   artifacts:
     paths:
     - public/
-
-
