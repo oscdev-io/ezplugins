@@ -74,10 +74,10 @@ pages:
         python-sphinx
         python-sphinx_rtd_theme
     # Build documentation
-    - cd docs
-    - make html
+    - python setup.py build_sphinx
+
   artifacts:
     paths:
-    - docs/_build
+    - "build/sphinx/html"
 
 

@@ -54,4 +54,12 @@ setup(
     ],
     python_requires=">=3.8",
     packages=find_packages(exclude=["tests", "tests.*"]),
+    command_options={
+        "build_sphinx": {
+            "project": ("setup.py", "EZPlugins"),
+            "copyright": ("setup.py", "2019-2021, AllWorldIT"),
+            "version": ("setup.py", VERSION),
+            "source_dir": ("setup.py", "docs"),
+        }
+    },
 )
