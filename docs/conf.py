@@ -9,17 +9,16 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-
-import os
-import sys
-sys.path.insert(0, '../')
+#
+# import sys
+# sys.path.insert(0, '../')
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'EZPlugins'
-copyright = '2019-2021, AllWorldIT'
-author = 'Nigel Kukard'
+# project = ''
+# copyright = ''
+# author = ''
 
 
 # -- General configuration ---------------------------------------------------
