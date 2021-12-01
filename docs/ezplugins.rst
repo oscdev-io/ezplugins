@@ -4,6 +4,13 @@ The ezplugins package
 Package Modules
 ---------------
 
+Generally when using EZPlugins, the easiest to import everything one could need is to use the following::
+
+   import ezplugins
+
+Everything is exported by the package.
+
+
 ezplugins.decorators module
 ---------------------------
 
@@ -35,14 +42,3 @@ ezplugins.plugin module
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-
-Module contents
----------------
-
-.. automodule:: ezplugins
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
