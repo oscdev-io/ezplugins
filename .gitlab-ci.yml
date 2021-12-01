@@ -90,7 +90,7 @@ release_gitlab:
   - |
     if [ -n "$ASSETS_LIST" ]; then
       ASSETS=$(paste -s -d, <<< "$ASSETS_LIST")
-      ASSETS="[ $ASSETS ]"
+      ASSETS="--assets-link=[$ASSETS]"
     else
       ASSETS=""
     fi
