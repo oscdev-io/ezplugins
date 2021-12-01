@@ -78,13 +78,16 @@ release_gitlab:
   - pacman -Syu --noconfirm release-cli
   # Grab description
   - export DESCRIPTION=$(cat build/description.txt)
-  # Release
+  # Build asset JSON
   - cd dist
-  - assets=()
-  - |
-    for p in *.tar.* *.zip *.whl *SUMS.txt; do
-      assets+=--assets-link="{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}"
-    done
+  - ASSETS=$(
+      for p in *.tar.* *.zip *.whl *SUMS.txt; do
+        echo "{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}"
+      done
+    )
+  - ASSETS_STR=$(echo "["; paste -s -d, <<< "$ASSETS"; echo "]")
+  - echo -e "ASSETS:\n$ASSET_STR"
+  # Release
   - release-cli create --name "Release $CI_COMMIT_TAG" --tag-name "$CI_COMMIT_TAG" --description "$DESCRIPTION" "${assets[@]}"
 
 
