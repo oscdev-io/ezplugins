@@ -82,7 +82,7 @@ release_gitlab:
   - cd dist
   - ASSETS=$(
       for p in *.tar.* *.zip *.whl *SUMS.txt; do
-        echo "{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}"
+        echo "{\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}";
       done
     )
   - ASSETS_STR=$(echo "["; paste -s -d, <<< "$ASSETS"; echo "]")
