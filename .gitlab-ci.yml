@@ -75,9 +75,12 @@ pages:
         python-sphinx_rtd_theme
     # Build documentation
     - python setup.py build_sphinx
+    # Move documentation to public/
+    # This is the only supported path in gitlab
+    - mv build/sphinx/html public
 
   artifacts:
     paths:
-    - "build/sphinx/html/"
+    - public/
 
 
