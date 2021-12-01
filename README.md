@@ -19,11 +19,12 @@ If you want to install from a source distribution, extract the tarball and run t
 
 # Documentation
 
-
+  * [EZPlugins Documentation](https://software.pages.oscdev.io/ezplugins)
+  * [Contributing](https://gitlab.oscdev.io/oscdev/contributing/-/blob/master/README.md)
 
 # Support
 
-[Issue Tracker](https://gitlab.oscdev.io/software/ezplugins)
+  * [Issue Tracker](https://gitlab.oscdev.io/software/ezplugins)
 
 
 # License
