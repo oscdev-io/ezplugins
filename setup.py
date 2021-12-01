@@ -45,10 +45,10 @@ setup(
     long_description_content_type="text/markdown",
     url="https://oscdev.io/software/ezplugins",
     classifiers=[
-        "Development Status :: 3 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Plugins",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3 :: Only",
         "Topic :: Software Development",
     ],
