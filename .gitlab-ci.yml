@@ -120,14 +120,14 @@ release_pypi:
     - pacman -Syu --noconfirm
     - pacman -S --noconfirm twine
     - |
-        if [ -n "$PYPI_TOKEN" -a -n "$PYPI_USERNAME" ]; then
-          echo "Publishing to pypi..."
-          TWINE_PASSWORD="${PYPI_TOKEN}"" TWINE_USERNAME="${PYPI_USERNAME}" python -m twine upload dist/*.whl dist/*.tar.gz
-        else:
-          echo "NOT Publishing to pypi: No PYPI_TOKEN or PYPI_USERNAME"
-        fi
+      if [ -n "$PYPI_TOKEN" -a -n "$PYPI_USERNAME" ]; then
+        echo "Publishing to pypi..."
+        TWINE_PASSWORD="${PYPI_TOKEN}" TWINE_USERNAME="${PYPI_USERNAME}" python -m twine upload dist/*.whl dist/*.tar.gz
+      else
+        echo "NOT Publishing to pypi: No PYPI_TOKEN or PYPI_USERNAME"
+      fi
 
-        
+
 pages:
   stage: pages
   rules:
