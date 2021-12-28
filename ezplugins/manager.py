@@ -44,7 +44,7 @@ class EZPluginModule:
 
     Parameters
     ----------
-    module_name : str
+    module_name : :class:`str`
         Name of the module.
 
     """
@@ -64,7 +64,7 @@ class EZPluginModule:
 
         Parameters
         ----------
-        module_name : str
+        module_name : :class:`str`
             Name of the module.
 
         """
@@ -90,7 +90,11 @@ class EZPluginModule:
                 continue
             # Save plugin
             self._plugins.append(EZPlugin(plugin_class()))
-            logging.debug("EZPlugin loaded from '%s', class '%s'", self.module_name, plugin_class)
+            logging.debug(
+                "EZPlugin loaded from '%s', class '%s'",
+                self.module_name,
+                plugin_class.__name__,
+            )
 
         self._load_exception = None
 
@@ -101,7 +105,7 @@ class EZPluginModule:
 
         Returns
         -------
-        Optional[ModuleType]
+        Optional[:class:`ModuleType`]
             Module that was imported (if it was imported, or None).
 
         """
@@ -114,8 +118,7 @@ class EZPluginModule:
 
         Returns
         -------
-        str
-            Module name.
+        :class:`str` : Module name.
 
         """
         return self._module_name
@@ -127,8 +130,7 @@ class EZPluginModule:
 
         Returns
         -------
-        List[EZPlugin]
-            List of instantiated EZPlugin's that represent the plugin objects that were instantiated.
+        List[:class:`EZPlugin`] : List of instantiated EZPlugin's that represent the plugin objects that were instantiated.
 
         """
         return self._plugins
@@ -140,8 +142,7 @@ class EZPluginModule:
 
         Returns
         -------
-        Optional[Exception]
-            An exception raised during load if any, or None otherwise.
+        Optional[:class:`Exception`] : An exception raised during load if any, or None otherwise.
 
         """
         return self._load_exception
@@ -171,7 +172,7 @@ class EZPluginManager:
 
     Parameters
     ----------
-    plugin_packages : List[str]
+    plugin_packages : List[:class:`str`]
         Source packages to load plugins from.
 
     """
@@ -190,7 +191,7 @@ class EZPluginManager:
 
         Parameters
         ----------
-        plugin_packages : List[str]
+        plugin_packages : List[:class:`str`]
             Source packages to load plugins from.
 
         """
@@ -235,16 +236,16 @@ class EZPluginManager:
 
         Parameters
         ----------
-        where_name : Optional[str]
+        where_name : Optional[:class:`str`]
             Limit methods returned to those matching the name provided.
 
-        from_plugin : Optional[str]
+        from_plugin : Optional[:class:`str`]
             Limit methods returned to those belonging to a specific plugin.
 
         Returns
         -------
-        Iterator[Tuple[EZPluginMethod, EZPlugin]]
-            A generator that provides tuples in the format of (EZPluginMethod, EZPlugin).
+        Iterator[Tuple[:class:`EZPluginMethod`, :class:`EZPlugin`]] : A generator that provides tuples in the format of
+            (:class:`EZPluginMethod`, :class:`EZPlugin`).
 
         """
 
@@ -276,13 +277,12 @@ class EZPluginManager:
 
         Parameters
         ----------
-        plugin_name : str
+        plugin_name : :class:`str`
             Plugin to call the method in.
 
         Returns
         -------
-        set[EZPlugin]
-            Set of EZPlugin objects which matches the criteria.
+        set[:class:`EZPlugin`] : Set of :class:`EZPlugin` objects which matches the criteria.
 
         """
 
@@ -306,7 +306,7 @@ class EZPluginManager:
 
         Parameters
         ----------
-        plugin_packages : List[str]
+        plugin_packages : List[:class:`str`]
             List of plugin package names to load plugins from.
 
         """
@@ -323,7 +323,7 @@ class EZPluginManager:
 
         Parameters
         ----------
-        package_name : str
+        package_name : :class:`str`
             Package to load plugins from.
 
         """
@@ -376,8 +376,7 @@ class EZPluginManager:
 
         Returns
         -------
-        List[EZPluginModule]
-            Modules loaded during the course of finding plugins.
+        List[:class:`EZPluginModule`] : Modules loaded during the course of finding plugins.
 
         """
 
@@ -390,8 +389,7 @@ class EZPluginManager:
 
         Returns
         -------
-        List[EZPlugin]
-            List of all plugins loaded.
+        List[:class:`EZPlugin`] : List of all plugins loaded.
 
         """
 

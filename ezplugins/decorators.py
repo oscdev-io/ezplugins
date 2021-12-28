@@ -78,7 +78,7 @@ def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
 
     Parameters
     ----------
-    alias : Optioanl[str]
+    alias : Optioanl[:class:`str`]
         Plugin class alias, used when one wants to call a specific plugin or set of plugins with a custom name.
         This makes it easy to specify a plugin name instead of using the fully qualified plugin name or class name. You can also
         specify the same alias for a number of plugins which will result in all of them being called when using that alias.
@@ -125,7 +125,7 @@ def ezplugin_method(*, order: int = 5000) -> Callable[[EZPT], EZPT]:
 
     Parameters
     ----------
-    order : int
+    order : :class:`int`
         Run order of method if multiple methods are being executed. Defaults to 5000. Methods are executed lowest to highest.
 
     """

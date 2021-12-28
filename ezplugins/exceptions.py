@@ -36,10 +36,10 @@ class EZPluginMethodNotFoundException(EZPluginException):
 
     Parameters
     ----------
-    method_name : Optional[str]
+    method_name : Optional[:class:`str`]
         Method name.
 
-    plugin_name : Optional[str]
+    plugin_name : Optional[:class:`str`]
         Plugin name.
 
     """
@@ -53,10 +53,10 @@ class EZPluginMethodNotFoundException(EZPluginException):
 
         Parameters
         ----------
-        method_name : Optional[str]
+        method_name : Optional[:class:`str`]
             Method name.
 
-        plugin_name : Optional[str]
+        plugin_name : Optional[:class:`str`]
             Plugin name.
 
         """
