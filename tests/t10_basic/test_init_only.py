@@ -36,12 +36,11 @@ class TestBasicFunctionality(BaseTest):
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""
-        self.data["plugins"] = ezplugins.EZPluginManager([self.plugin_path("plugins_init_only")])
+        self.data["plugins"] = ezplugins.EZPluginManager()
+        self.data["plugins"].load_package(self.plugin_path("plugins_init_only"))
 
-        expected_modules = [
-            ("tests.t10_basic.plugins_init_only", None),
-        ]
+        expected_modules = ["tests.t10_basic.plugins_init_only"]
 
-        received_modules = [(x.module_name, x.load_exception) for x in self.data["plugins"].modules]
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
 
         assert received_modules == expected_modules, "All plugins did not get loaded"

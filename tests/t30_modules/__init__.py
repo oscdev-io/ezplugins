@@ -21,19 +21,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugins package."""
-
-__all__ = [
-    "EZPluginException",
-    "EZPluginMethodNotFoundException",
-    "ezplugin",
-    "ezplugin_metadata",
-    "ezplugin_method",
-    "EZPluginManager",
-]
-
-from .exceptions import EZPluginException, EZPluginMethodNotFoundException
-from .decorators import ezplugin, ezplugin_metadata, ezplugin_method
-from .manager import EZPluginManager
-
-__VERSION__ = "1.1.0"
+"""EZPlugins tests."""

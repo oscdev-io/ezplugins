@@ -38,18 +38,15 @@ class TestPluginCallException(BaseTest):
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""
-        self.data["plugins"] = ezplugins.EZPluginManager([self.plugin_path("plugins_call_exception")])
+        self.data["plugins"] = ezplugins.EZPluginManager()
+        self.data["plugins"].load_package(self.plugin_path("plugins_call_exception"))
 
         expected_modules = [
-            (
-                "tests.t20_exceptions.plugins_call_exception.plugin1",
-                type(None),
-                "None",
-            ),
-            ("tests.t20_exceptions.plugins_call_exception.plugin2", type(None), "None"),
+            "tests.t20_exceptions.plugins_call_exception.plugin1",
+            "tests.t20_exceptions.plugins_call_exception.plugin2",
         ]
 
-        received_modules = [(x.module_name, type(x.load_exception), repr(x.load_exception)) for x in self.data["plugins"].modules]
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
 
         assert received_modules == expected_modules, "Result from plugin load does not match"
 
