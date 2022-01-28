@@ -23,7 +23,8 @@
 
 """EZPlugins tests."""
 
-import typing as T
+from typing import Dict
+
 import ezplugins
 
 from ..base import BaseTest
@@ -32,27 +33,28 @@ from ..base import BaseTest
 class TestBasicFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
-    data: T.Dict[str, ezplugins.EZPluginManager] = {}
+    data: Dict[str, ezplugins.EZPluginManager] = {}
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""
-        self.data["plugins"] = ezplugins.EZPluginManager([self.plugin_path("plugins")])
+        self.data["plugins"] = ezplugins.EZPluginManager()
+        self.data["plugins"].load_package(self.plugin_path("plugins"))
 
         expected_modules = [
-            ("tests.t10_basic.plugins.plugin1", None),
-            ("tests.t10_basic.plugins.plugin2", None),
-            ("tests.t10_basic.plugins.plugin3_plus_4", None),
-            ("tests.t10_basic.plugins.plugin5_alias", None),
-            ("tests.t10_basic.plugins.plugin6a_alias", None),
-            ("tests.t10_basic.plugins.plugin6b_alias", None),
-            ("tests.t10_basic.plugins.plugin7_method_order", None),
-            ("tests.t10_basic.plugins.plugin8_call_parameters", None),
-            ("tests.t10_basic.plugins.subplugin.subplugin1", None),
-            ("tests.t10_basic.plugins.subplugin_init", None),
-            ("tests.t10_basic.plugins.subsubplugin.thesubsubplugin.subsubplugin1", None),
+            "tests.t10_basic.plugins.plugin1",
+            "tests.t10_basic.plugins.plugin2",
+            "tests.t10_basic.plugins.plugin3_plus_4",
+            "tests.t10_basic.plugins.plugin5_alias",
+            "tests.t10_basic.plugins.plugin6a_alias",
+            "tests.t10_basic.plugins.plugin6b_alias",
+            "tests.t10_basic.plugins.plugin7_method_order",
+            "tests.t10_basic.plugins.plugin8_call_parameters",
+            "tests.t10_basic.plugins.subplugin.subplugin1",
+            "tests.t10_basic.plugins.subplugin_init",
+            "tests.t10_basic.plugins.subsubplugin.thesubsubplugin.subsubplugin1",
         ]
 
-        received_modules = [(x.module_name, x.load_exception) for x in self.data["plugins"].modules]
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
 
         assert received_modules == expected_modules, "All plugins did not get loaded"
 

@@ -42,3 +42,19 @@ ezplugins.plugin module
    :members:
    :undoc-members:
    :show-inheritance:
+
+ezplugins.plugin_module module
+------------------------------
+
+.. automodule:: ezplugins.plugin_module
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+ezplugins.plugin_method module
+------------------------------
+
+.. automodule:: ezplugins.plugin_method
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -23,96 +23,16 @@
 
 """EZPlugins plugin classes."""
 
-from typing import Any, Callable, List, Optional
+from typing import List, Optional
 
-
-class EZPluginMethod:
-    """
-    Representation of a plugin method. This class is designed to be instantiated during plugin load.
-
-    See :meth:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
-
-    Parameters
-    ----------
-    method : Callable[..., Any]
-        Plugin method.
-
-    """
-
-    _method: Callable[..., Any]
-
-    def __init__(self, method: Callable[..., Any]) -> None:
-        """
-        Representation of a plugin method. This class is designed to be instantiated during plugin load.
-
-        See :meth:`ezplugins.manager.EZPluginManager.methods` for how to call plugin methods.
-
-        Parameters
-        ----------
-        method : Callable[..., Any]
-            Plugin method.
-
-        """
-
-        self._method = method  # type: ignore
-
-    def run(self, *args: Any, **kwargs: Any) -> Any:
-        """
-        Run the method.
-
-        Parameters
-        ----------
-        args : Any
-            Arguments to pass.
-
-        kwargs : Any
-            Keyword arguments to pass.
-
-        """
-        return self.method(*args, **kwargs)
-
-    @property
-    def method(self) -> Callable[..., Any]:
-        """
-        Actual :class:`EZPlugin` method which can be called.
-
-        Returns
-        -------
-        Callable[..., Any] : A callable.
-
-        """
-        return self._method
-
-    @property
-    def name(self) -> str:
-        """
-        Name of the EZPlugin method.
-
-        Returns
-        -------
-        :class:`str` : :class:`EZPlugin` method name.
-
-        """
-        return self.method.__name__
-
-    @property
-    def order(self) -> int:
-        """
-        Order of execution of this EZPlugin method.
-
-        Returns
-        -------
-        :class:`int` : Order of execution.
-
-        """
-        return int(getattr(self.method, "_ezplugin_order"))
+from .plugin_method import EZPluginMethod
 
 
 class EZPlugin:
     """
     Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-    See :attr:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
+    See :attr:`~EZPluginManager.plugins` for how to get a list of loaded plugins.
 
     Parameters
     ----------
@@ -132,7 +52,7 @@ class EZPlugin:
         """
         Class that represents the instantiated plugin. This class is designed to be instantiated during plugin load.
 
-        See :attr:`ezplugins.manager.EZPluginManager.plugins` for how to get a list of loaded plugins.
+        See :attr:`~EZPluginManager.plugins` for how to get a list of loaded plugins.
 
         Parameters
         ----------
@@ -167,7 +87,8 @@ class EZPlugin:
 
         Returns
         -------
-        :class:`object` : Plugin object.
+        :class:`object` :
+            Plugin object.
 
         """
         return self._obj
@@ -179,7 +100,8 @@ class EZPlugin:
 
         Returns
         -------
-        List[:class:`EZPluginMethod`] : A list of callables.
+        List[:class:`~plugin_method.EZPluginMethod`] :
+            A list of callables.
 
         """
         return self._methods
@@ -191,7 +113,8 @@ class EZPlugin:
 
         Returns
         -------
-        :class:`str` : Plugin name. (class name prefixed with #)
+        :class:`str` :
+            Plugin name. (class name prefixed with #)
 
         """
         return self._name
@@ -203,7 +126,8 @@ class EZPlugin:
 
         Returns
         -------
-        :class:`str` : Fully qualified plugin name.
+        :class:`str` :
+            Fully qualified plugin name.
 
         """
         return self._fqn
@@ -215,7 +139,8 @@ class EZPlugin:
 
         Returns
         -------
-        :class:`str` : Plugin path.
+        :class:`str` :
+            Plugin path.
 
         """
         return self._path
@@ -227,7 +152,8 @@ class EZPlugin:
 
         Returns
         -------
-        Optional[:class:`str`] : Plugin alias.
+        Optional[:class:`str`] :
+            Plugin alias.
 
         """
         return self._alias

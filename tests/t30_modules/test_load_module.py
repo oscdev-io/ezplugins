@@ -24,14 +24,12 @@
 """EZPlugins tests."""
 
 from typing import Dict, List
-
-import pytest
 import ezplugins
 
 from ..base import BaseTest
 
 
-class TestBasicFunctionality(BaseTest):
+class TestModuleFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
@@ -40,17 +38,28 @@ class TestBasicFunctionality(BaseTest):
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        with pytest.raises(TypeError, match=r"ezplugin_method\(\) takes 0 positional arguments but 1 was given"):
-            self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions.plugin1"))
-        with pytest.raises(
-            ModuleNotFoundError, match="No module named 'somethingthatdoesntexist_subplugins_init_exception_for__init__'"
-        ):
-            self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions.subplugins_init_exception"))
-        with pytest.raises(NameError, match="name 'doesntexist' is not defined"):
-            self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions.subplugins_invalid_decorator.subplugin1"))
+        import tests.t30_modules.plugins.plugin1  # noqa pylint: disable=import-outside-toplevel,unused-import
+
+        self.data["plugins"].load_module("tests.t30_modules.plugins.plugin1")
+
+        expected_modules = [
+            "tests.t30_modules.plugins.plugin1",
+        ]
+
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
+
+        assert received_modules == expected_modules, "All plugins did not get loaded"
+
+    def test_plugin_load_blank(self) -> None:
+        """Test loading of blank plugin."""
+        self.data["plugins"] = ezplugins.EZPluginManager()
+
+        import tests.t30_modules.plugins_blank  # noqa pylint: disable=import-outside-toplevel,unused-import
+
+        self.data["plugins"].load_module("tests.t30_modules.plugins_blank")
 
         expected_modules: List[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 
-        assert received_modules == expected_modules, "Plugins did not return correct load status"
+        assert received_modules == expected_modules, "All plugins did not get loaded"

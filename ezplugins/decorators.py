@@ -40,8 +40,8 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
         class MyPlugin:
             ...
 
-    The result of using this decorator is the class is marked as being a EZPlugin plugin class that is instantiated during plugin
-    load.
+    The result of using this decorator is the class is marked as being a :class:`~ezplugins.plugin.EZPlugin` plugin class that is
+    instantiated during plugin load.
 
     Multiple plugin classes can be defined in the same file. The search for plugin classes is recursive.
 
@@ -52,7 +52,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     to make things easier, plugins can also be called using ``#ClassName``, keep in mind though that one can have two classes with
     the same name in different modules.
 
-    See the :func:`ezplugins.decorators.ezplugin_metadata` decorator for specifying a plugin alias.
+    See the :func:`~ezplugin_metadata` decorator for specifying a plugin alias.
 
     """
 
@@ -66,7 +66,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
 
 def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
     """
-    Decorate a class as being a loadable plugin with metadata. See :data:`ezplugins.decorators.ezplugin` for more information.
+    Decorate a class as being a loadable plugin with metadata. See :func:`~ezplugin` for more information.
 
     Classes can be decorated and additional metadata added like this::
 

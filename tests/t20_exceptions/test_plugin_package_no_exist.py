@@ -23,8 +23,9 @@
 
 """EZPlugins tests."""
 
-from typing import Dict
+from typing import Dict, List
 
+import pytest
 import ezplugins
 
 from ..base import BaseTest
@@ -37,16 +38,12 @@ class TestPackageNoExist(BaseTest):
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""
-        self.data["plugins"] = ezplugins.EZPluginManager([self.plugin_path("some_package_does_not_exist")])
+        self.data["plugins"] = ezplugins.EZPluginManager()
+        with pytest.raises(ModuleNotFoundError, match="No module named 'tests.t20_exceptions.some_package_does_not_exist'"):
+            self.data["plugins"].load_package(self.plugin_path("some_package_does_not_exist"))
 
-        expected_modules = [
-            (
-                "tests.t20_exceptions.some_package_does_not_exist",
-                ModuleNotFoundError,
-                "ModuleNotFoundError(\"No module named 'tests.t20_exceptions.some_package_does_not_exist'\")",
-            )
-        ]
+        expected_modules: List[str] = []
 
-        received_modules = [(x.module_name, type(x.load_exception), repr(x.load_exception)) for x in self.data["plugins"].modules]
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
 
         assert received_modules == expected_modules, "Result from plugin load does not match"

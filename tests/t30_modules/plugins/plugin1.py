@@ -21,26 +21,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugins tests."""
+"""EZPlugins tests - Plugins for tests."""
 
-from typing import Dict
 import ezplugins
 
-from ..base import BaseTest
 
+@ezplugins.ezplugin
+class Plugin1:  # pylint: disable=too-few-public-methods
+    """Test plugin 1."""
 
-class TestBasicFunctionality(BaseTest):
-    """Test basic functionality of EZPlugins."""
-
-    data: Dict[str, ezplugins.EZPluginManager] = {}
-
-    def test_plugin_load(self) -> None:
-        """Test loading of plugins."""
-        self.data["plugins"] = ezplugins.EZPluginManager()
-        self.data["plugins"].load_package(self.plugin_path("plugins_init_only"))
-
-        expected_modules = ["tests.t10_basic.plugins_init_only"]
-
-        received_modules = [x.module_name for x in self.data["plugins"].modules]
-
-        assert received_modules == expected_modules, "All plugins did not get loaded"
+    @ezplugins.ezplugin_method()
+    def test_func1(self) -> str:
+        """Test function."""
+        return f"{self.__module__}.{__name__}#{self.__class__.__name__}"
