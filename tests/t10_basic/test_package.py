@@ -29,6 +29,9 @@ import ezplugins
 
 from ..base import BaseTest
 
+__all__ = [
+    "TestPackageBasicFunctionality",
+]
 
 class TestBasicFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""

@@ -27,6 +27,12 @@ from typing import Callable, Optional, Type, TypeVar
 
 EZPT = TypeVar("EZPT")
 
+__all__ = [
+    "ezplugin",
+    "ezplugin_metadata",
+    "ezplugin_method",
+]
+
 
 def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     """

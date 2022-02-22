@@ -25,6 +25,10 @@
 
 import ezplugins
 
+__all__ = [
+    "SubSubPlugin1",
+]
+
 
 @ezplugins.ezplugin
 class SubSubPlugin1:

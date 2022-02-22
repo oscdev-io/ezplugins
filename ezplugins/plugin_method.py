@@ -25,6 +25,10 @@
 
 from typing import Any, Callable
 
+__all__ = [
+    "EZPluginMethod",
+]
+
 
 class EZPluginMethod:
     """

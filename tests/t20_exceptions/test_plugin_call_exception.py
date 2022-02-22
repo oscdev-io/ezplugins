@@ -30,6 +30,10 @@ import ezplugins
 
 from ..base import BaseTest
 
+__all__ = [
+    "TestPluginCallException",
+]
+
 
 class TestPluginCallException(BaseTest):
     """Test for the case that the plugin package doesn't exist."""

@@ -25,6 +25,10 @@
 
 from typing import Optional
 
+__all__ = [
+    "EZPluginError",
+    "EZPluginMethodNotFoundError",
+]
 
 class EZPluginException(Exception):
     """EZPlugin related exception base class."""

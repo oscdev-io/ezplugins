@@ -34,6 +34,10 @@ from .plugin import EZPlugin
 from .plugin_method import EZPluginMethod
 from .plugin_module import EZPluginModule
 
+__all__ = [
+    "EZPluginManager",
+]
+
 
 class EZPluginManager:
     """

@@ -28,6 +28,10 @@ import ezplugins
 
 from ..base import BaseTest
 
+__all__ = [
+    "TestLoadModulesFunctionality",
+]
+
 
 class TestModulesFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
