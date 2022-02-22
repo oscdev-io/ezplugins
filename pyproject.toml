@@ -33,6 +33,10 @@ Homepage = "https://gitlab.oscdev.io/software/ezplugins"
 Documentation = "https://software.pages.oscdev.io/ezplugins"
 
 
+[tox]
+isolated_build = true
+
+
 [tool.poetry]
 packages = [
     { include = "ezplugins" }
