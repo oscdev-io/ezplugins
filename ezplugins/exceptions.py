@@ -30,11 +30,12 @@ __all__ = [
     "EZPluginMethodNotFoundError",
 ]
 
-class EZPluginException(Exception):
+
+class EZPluginError(Exception):
     """EZPlugin related exception base class."""
 
 
-class EZPluginMethodNotFoundException(EZPluginException):
+class EZPluginMethodNotFoundError(EZPluginError):
     """
     Exception raised when a plugin method or plugin is not found during a :meth:`~ezplugins.manager.EZPluginManager.methods` call.
 

@@ -24,16 +24,16 @@
 """EZPlugins package."""
 
 __all__ = [
-    "EZPluginException",
-    "EZPluginMethodNotFoundException",
+    "EZPluginError",
+    "EZPluginMethodNotFoundError",
     "ezplugin",
     "ezplugin_metadata",
     "ezplugin_method",
     "EZPluginManager",
 ]
 
-from .exceptions import EZPluginException, EZPluginMethodNotFoundException
 from .decorators import ezplugin, ezplugin_metadata, ezplugin_method
+from .exceptions import EZPluginError, EZPluginMethodNotFoundError
 from .manager import EZPluginManager
 
 __VERSION__ = "1.1.0"

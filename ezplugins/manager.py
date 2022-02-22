@@ -29,7 +29,7 @@ import re
 import sys
 from typing import Dict, Iterator, List, Optional, Tuple
 
-from .exceptions import EZPluginMethodNotFoundException
+from .exceptions import EZPluginMethodNotFoundError
 from .plugin import EZPlugin
 from .plugin_method import EZPluginMethod
 from .plugin_module import EZPluginModule
@@ -157,7 +157,7 @@ class EZPluginManager:
 
         # If we didn't find any methods, raise an exception
         if not found_methods:
-            raise EZPluginMethodNotFoundException(method_name=where_name, plugin_name=from_plugin)
+            raise EZPluginMethodNotFoundError(method_name=where_name, plugin_name=from_plugin)
 
         # Loop with the ordered methods
         for method, plugin in sorted(found_methods.items(), key=lambda x: x[0].order):
