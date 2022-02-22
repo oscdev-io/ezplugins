@@ -191,7 +191,7 @@ class EZPluginManager:
 
         return plugin_set
 
-    def load_package(self, package_name: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_package(self, package_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Recursively search the package package_name and retrieve all plugins.
 
@@ -246,7 +246,7 @@ class EZPluginManager:
             )
             self._modules.append(plugin_module)
 
-    def load_module(self, module_name: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_module(self, module_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Load plugins from a module.
 
@@ -284,7 +284,7 @@ class EZPluginManager:
         )
         self._modules.append(plugin_module)
 
-    def load_modules(self, matching: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_modules(self, matching: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Load plugins from modules matching a regex.
 
