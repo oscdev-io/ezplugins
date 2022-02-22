@@ -235,7 +235,11 @@ class EZPluginManager:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
-            logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+            logging.debug(
+                "Adding plugin module: %s (%s plugins)",
+                plugin_module.module_name,
+                len(plugin_module.plugins),
+            )
             self._modules.append(plugin_module)
 
     def load_module(self, module_name: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
@@ -269,7 +273,11 @@ class EZPluginManager:
             logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
             return
         # Add to the plugin modules list
-        logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+        logging.debug(
+            "Adding plugin module: %s (%s plugins)",
+            plugin_module.module_name,
+            len(plugin_module.plugins),
+        )
         self._modules.append(plugin_module)
 
     def load_modules(self, matching: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
@@ -307,7 +315,11 @@ class EZPluginManager:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
-            logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+            logging.debug(
+                "Adding plugin module: %s (%s plugins)",
+                plugin_module.module_name,
+                len(plugin_module.plugins),
+            )
             self._modules.append(plugin_module)
 
     #
