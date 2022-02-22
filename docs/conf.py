@@ -19,12 +19,12 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 
-from ezplugins import __VERSION__
+from ezplugins import __version__
 
 project = "EZPlugins"
 copyright = "2019-2022, AllWorldIT"
 author = "Nigel Kukard <nkukard@LBSD.net>"
-version = __VERSION__
+version = __version__
 
 
 # -- General configuration ---------------------------------------------------
