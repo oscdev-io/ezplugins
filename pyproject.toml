@@ -1,6 +1,50 @@
 [build-system]
-requires = ["setuptools>=49", "setuptools-scm", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[project]
+name = "ezplugins"
+version = "1.1.0"
+description = "EZPlugins is an easy to use plugin framework."
+readme = "README.md"
+requires_python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Nigel Kukard", email = "nkukard@LBSD.net" }
+]
+keywords = ["framework", "plugin", "plugins"]
+classifiers=[
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Plugins",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+]
+
+
+[project.urls]
+Homepage = "https://gitlab.oscdev.io/software/ezplugins"
+"Issue Tracker" = "https://gitlab.oscdev.io/software/ezplugins/-/issues"
+"Source Code" = "https://gitlab.oscdev.io/software/ezplugins"
+Documentation = "https://software.pages.oscdev.io/ezplugins"
+
+
+[tool.poetry]
+packages = [
+    { include = "ezplugins" }
+]
+
 
 [tool.black]
 line-length = 132
+
+
+[tool.isort]
+line_length = 120
+profile = "black"
+
+
+[tool.pylint.message_control]
+max-line-length = 132
