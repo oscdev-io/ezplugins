@@ -26,6 +26,7 @@
 from typing import Dict, List
 
 import pytest
+
 import ezplugins
 
 from ..base import BaseTest

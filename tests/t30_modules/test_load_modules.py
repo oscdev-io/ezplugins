@@ -24,6 +24,7 @@
 """EZPlugins tests."""
 
 from typing import Dict, List
+
 import ezplugins
 
 from ..base import BaseTest
@@ -33,18 +34,18 @@ __all__ = [
 ]
 
 
-class TestModulesFunctionality(BaseTest):
+class TestLoadModulesFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_plugin_load(self) -> None:
+    def test_modules_load(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        import tests.t30_modules.plugins  # noqa pylint: disable=import-outside-toplevel,unused-import
-        import tests.t30_modules.plugins.plugin1  # noqa pylint: disable=import-outside-toplevel,unused-import
-        import tests.t30_modules.plugins.plugin2  # noqa pylint: disable=import-outside-toplevel,unused-import
+        import tests.t30_modules.plugins  # pylint: disable=import-outside-toplevel,unused-import
+        import tests.t30_modules.plugins.plugin1  # pylint: disable=import-outside-toplevel,unused-import
+        import tests.t30_modules.plugins.plugin2  # pylint: disable=import-outside-toplevel,unused-import # noqa: F401
 
         self.data["plugins"].load_modules(r"^tests.t30_modules.plugins")
 
@@ -58,7 +59,7 @@ class TestModulesFunctionality(BaseTest):
 
         assert received_modules == expected_modules, "All plugins did not get loaded"
 
-    def test_plugin_load_blank(self) -> None:
+    def test_load_blank_modules(self) -> None:
         """Test loading of blank plugin."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 

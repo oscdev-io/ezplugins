@@ -26,14 +26,15 @@
 import ezplugins
 
 __all__ = [
-    "SubPlugin1",
+    "Plugin6c",
 ]
 
 
-@ezplugins.ezplugin
-class SubPlugin1:  # pylint: disable=too-few-public-methods
-    """Test sub-plugin 1."""
+@ezplugins.ezplugin_metadata()
+class Plugin6c:  # pylint: disable=too-few-public-methods
+    """Test plugin 6 with no alias."""
 
+    @ezplugins.ezplugin_method()
     def test_func1(self) -> str:
         """Test function."""
-        return f"{self.__module__}.{__name__}"
+        return f"{self.__module__}.{__name__}#{self.__class__.__name__}"

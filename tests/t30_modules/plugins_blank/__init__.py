@@ -23,4 +23,4 @@
 
 """EZPlugins tests - Plugins for tests."""
 
-import ezplugins
+import ezplugins  # noqa

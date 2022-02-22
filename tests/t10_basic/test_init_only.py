@@ -24,6 +24,7 @@
 """EZPlugins tests."""
 
 from typing import Dict
+
 import ezplugins
 
 from ..base import BaseTest
@@ -33,12 +34,12 @@ __all__ = [
 ]
 
 
-class TestBasicFunctionality(BaseTest):
+class TestInitOnlyBasicFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_plugin_load(self) -> None:
+    def test_init_only(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
         self.data["plugins"].load_package(self.plugin_path("plugins_init_only"))

@@ -23,4 +23,4 @@
 
 """EZPlugins tests - Plugins for tests."""
 
-import somethingthatdoesntexist_subplugins_init_exception_for__init__  # pylint: disable=import-error
+import somethingthatdoesntexist_subplugins_init_exception_for__init__  # pylint: disable=import-error # noqa # type: ignore
