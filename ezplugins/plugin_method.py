@@ -112,4 +112,4 @@ class EZPluginMethod:
             Order of execution.
 
         """
-        return int(getattr(self.method, "_ezplugin_order"))
+        return int(getattr(self.method, "_ezplugin_order"))  # noqa: B009
