@@ -37,6 +37,7 @@ prepare_release:
       python-tox
   # Build docs and packages
   - tox -e build -e docs
+  - mkdir -p build
   - mv docs/build/html build/docs
   # Build compressed files and checksums
   - cd dist
