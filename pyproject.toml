@@ -1,16 +1,15 @@
 [build-system]
-# requires = ["poetry_core>=1.0.0"]
-# build-backend = "poetry.core.masonry.api"
-requires = ["flit_core >=3.2,<4"]
+#build-backend = "poetry.core.masonry.api"
+#requires = ["poetry-core", "setuptools"]
+requires = ["flit_core"]
 build-backend = "flit_core.buildapi"
 
 
 [project]
 name = "ezplugins"
-version = "1.1.0"
 description = "EZPlugins is an easy to use plugin framework."
 readme = "README.md"
-requires_python = ">=3.8"
+requires-python = ">=3.8"
 license = { file = "LICENSE" }
 authors = [
     { name = "Nigel Kukard", email = "nkukard@LBSD.net" }
@@ -24,6 +23,7 @@ classifiers=[
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development",
 ]
+dynamic = ["version"]
 
 
 [project.urls]
@@ -38,6 +38,10 @@ isolated_build = true
 
 
 [tool.poetry]
+name = "ezplugins"
+#version = "x.x.x"
+description = "EZPlugins is an easy to use plugin framework."
+authors = ["Nigel Kukard <nkukard@LBSD.net>"]
 packages = [
     { include = "ezplugins" }
 ]
