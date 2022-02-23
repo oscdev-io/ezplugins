@@ -25,9 +25,13 @@
 
 import ezplugins
 
+__all__ = [
+    "SubPlugin1",
+]
+
 
 @ezplugins.ezplugin
-class SubPlugin1:
+class SubPlugin1:  # pylint: disable=too-few-public-methods
     """Test sub-plugin 1."""
 
     def test_func1(self) -> str:

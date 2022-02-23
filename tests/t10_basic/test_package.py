@@ -29,13 +29,17 @@ import ezplugins
 
 from ..base import BaseTest
 
+__all__ = [
+    "TestPackageBasicFunctionality",
+]
 
-class TestBasicFunctionality(BaseTest):
+
+class TestPackageBasicFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_plugin_load(self) -> None:
+    def test_package_load(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
         self.data["plugins"].load_package(self.plugin_path("plugins"))
@@ -47,6 +51,7 @@ class TestBasicFunctionality(BaseTest):
             "tests.t10_basic.plugins.plugin5_alias",
             "tests.t10_basic.plugins.plugin6a_alias",
             "tests.t10_basic.plugins.plugin6b_alias",
+            "tests.t10_basic.plugins.plugin6c_no_alias",
             "tests.t10_basic.plugins.plugin7_method_order",
             "tests.t10_basic.plugins.plugin8_call_parameters",
             "tests.t10_basic.plugins.subplugin.subplugin1",
@@ -119,6 +124,11 @@ class TestBasicFunctionality(BaseTest):
                 "tests.t10_basic.plugins.plugin6b_alias#Plugin6b",
                 "test_func1",
                 "tests.t10_basic.plugins.plugin6b_alias.tests.t10_basic.plugins.plugin6b_alias#Plugin6b",
+            ),
+            (
+                "tests.t10_basic.plugins.plugin6c_no_alias#Plugin6c",
+                "test_func1",
+                "tests.t10_basic.plugins.plugin6c_no_alias.tests.t10_basic.plugins.plugin6c_no_alias#Plugin6c",
             ),
             (
                 "tests.t10_basic.plugins.subplugin.subplugin1#SubPlugin1",

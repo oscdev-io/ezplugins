@@ -24,6 +24,11 @@
 """EZPlugins tests base class."""
 
 
+__all__ = [
+    "BaseTest",
+]
+
+
 class BaseTest:  # pylint: disable=too-few-public-methods
     """Base class for tests which implements a few things for re-use."""
 

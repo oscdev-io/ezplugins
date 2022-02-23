@@ -27,6 +27,12 @@ from typing import Callable, Optional, Type, TypeVar
 
 EZPT = TypeVar("EZPT")
 
+__all__ = [
+    "ezplugin",
+    "ezplugin_metadata",
+    "ezplugin_method",
+]
+
 
 def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     """
@@ -57,8 +63,8 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     """
 
     def decorator(cls: Type[EZPT]) -> Type[EZPT]:
-        # Set class attribute
-        setattr(cls, "_is_ezplugin", True)
+        # Set class attribute, we set attr to avoid errors due to protected class changes
+        setattr(cls, "_is_ezplugin", True)  # noqa: B010
         return cls
 
     return decorator(cls)
@@ -86,11 +92,12 @@ def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
     """
 
     def decorator(cls: EZPT) -> EZPT:
-        # Set function attribute
-        setattr(cls, "_is_ezplugin", True)
+        # Set class attribute, we set attr to avoid errors due to protected class changes
+        setattr(cls, "_is_ezplugin", True)  # noqa: B010
         # Setup metadata if it exists
         if alias:
-            setattr(cls, "_ezplugin_alias", alias)
+            # Set class attribute, we set attr to avoid errors due to protected class changes
+            setattr(cls, "_ezplugin_alias", alias)  # noqa: B010
         return cls
 
     return decorator
@@ -131,8 +138,8 @@ def ezplugin_method(*, order: int = 5000) -> Callable[[EZPT], EZPT]:
     """
 
     def decorator(func: EZPT) -> EZPT:
-        # Set function attribute
-        setattr(func, "_ezplugin_order", order)
+        # Set class attribute, we set attr to avoid errors due to protected class changes
+        setattr(func, "_ezplugin_order", order)  # noqa: B010
         return func
 
     return decorator

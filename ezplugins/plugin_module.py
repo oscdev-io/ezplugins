@@ -32,6 +32,10 @@ from typing import List
 
 from .plugin import EZPlugin
 
+__all__ = [
+    "EZPluginModule",
+]
+
 
 class EZPluginModule:
     """
@@ -76,12 +80,8 @@ class EZPluginModule:
 
         logging.debug("EZPLUGINS => MODULE NAME: %s", module_name)
 
-        # Check if module is loaded
-        if module_name in sys.modules:
-            module = sys.modules[module_name]
-        else:
-            # Try import
-            module = importlib.import_module(module_name)
+        # Check if module is loaded and import if it's not
+        module = sys.modules.get(module_name, importlib.import_module(module_name))
 
         self._module = module
 

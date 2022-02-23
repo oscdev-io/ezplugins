@@ -25,9 +25,13 @@
 
 import ezplugins
 
+__all__ = [
+    "Plugin1",
+]
+
 
 @ezplugins.ezplugin
-class Plugin1:
+class Plugin1:  # pylint: disable=too-few-public-methods
     """Test plugin 1."""
 
     @ezplugins.ezplugin_method()

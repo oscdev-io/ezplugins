@@ -24,17 +24,22 @@
 """EZPlugins tests."""
 
 from typing import Dict, List
+
 import ezplugins
 
 from ..base import BaseTest
 
+__all__ = [
+    "TestLoadModuleFunctionality",
+]
 
-class TestModuleFunctionality(BaseTest):
+
+class TestLoadModuleFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_plugin_load(self) -> None:
+    def test_module_load(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
@@ -50,7 +55,7 @@ class TestModuleFunctionality(BaseTest):
 
         assert received_modules == expected_modules, "All plugins did not get loaded"
 
-    def test_plugin_load_blank(self) -> None:
+    def test_load_blank_module(self) -> None:
         """Test loading of blank plugin."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 

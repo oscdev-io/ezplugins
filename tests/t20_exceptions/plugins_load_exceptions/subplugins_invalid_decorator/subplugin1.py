@@ -21,16 +21,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# type: ignore
+
 """EZPlugins tests - Plugins for tests."""
 
 import ezplugins
 
+__all__ = [
+    "SubPlugin1",
+]
+
 
 @ezplugins.ezplugin
-class SubPlugin1:
+class SubPlugin1:  # pylint: disable=too-few-public-methods
     """Test sub-plugin 1."""
 
-    @doesntexist
+    @doesntexist  # noqa # pylint: disable=undefined-variable
     def test_func1(self) -> str:
         """Test function."""
         return f"{self.__module__}.{__name__}"

@@ -26,9 +26,14 @@
 from typing import Dict
 
 import pytest
+
 import ezplugins
 
 from ..base import BaseTest
+
+__all__ = [
+    "TestPluginCallException",
+]
 
 
 class TestPluginCallException(BaseTest):
@@ -80,9 +85,9 @@ class TestPluginCallException(BaseTest):
     def test_call_no_method(self) -> None:
         """Test calling a method from a plugin that doesn't exist."""
 
-        with pytest.raises(Exception) as excinfo:
-            for method, _ in self.data["plugins"].methods(where_name="test_func2"):
-                method.run()
+        with pytest.raises(ezplugins.EZPluginMethodNotFoundError) as excinfo:
+            # Coerce the results into a list so we iterate
+            list(self.data["plugins"].methods(where_name="test_func2"))
 
         assert ("No EZPlugin method(s) found", None, "test_func2") == (
             str(excinfo.value),
@@ -93,9 +98,9 @@ class TestPluginCallException(BaseTest):
     def test_call_no_plugin(self) -> None:
         """Test calling a method from a specific plugin that doesn't exist."""
 
-        with pytest.raises(Exception) as excinfo:
-            for method, _ in self.data["plugins"].methods(where_name="test_func1", from_plugin="#DoesNotExist"):
-                method.run()
+        with pytest.raises(ezplugins.EZPluginMethodNotFoundError) as excinfo:
+            # Coerce the results into a list so we iterate
+            list(self.data["plugins"].methods(where_name="test_func1", from_plugin="#DoesNotExist"))
 
         assert ("No EZPlugin method(s) found", "#DoesNotExist", "test_func1") == (
             str(excinfo.value),

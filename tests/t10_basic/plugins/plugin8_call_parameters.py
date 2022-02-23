@@ -24,7 +24,12 @@
 """EZPlugins tests - Plugins for tests."""
 
 from typing import Any, Dict
+
 import ezplugins
+
+__all__ = [
+    "Plugin8",
+]
 
 
 @ezplugins.ezplugin

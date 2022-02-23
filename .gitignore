@@ -7,3 +7,6 @@ dist/
 **/__pycache__/
 *.egg-info
 .eggs/
+*.code-workspace
+.vscode/
+tmp/

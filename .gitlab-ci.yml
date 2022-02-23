@@ -18,17 +18,12 @@ test_job:
   # Create environment
   - pacman -Syu --noconfirm
   - pacman -S --noconfirm
+      git
       python
-      python-pytest
-      python-pytest-cov
-      python-pytest-black
-      python-pytest-pycodestyle
-      python-pytest-pydocstyle
-      python-pytest-pylint
-      python-pytest-mypy
-      python-pytest-runner
+      python-tox
   # Run tests
-  - python setup.py test
+  - tox
+
 
 prepare_release:
   stage: prepare_release
@@ -36,18 +31,19 @@ prepare_release:
     - if: $CI_COMMIT_TAG
   script:
   - pacman -Syu --noconfirm
-  - pacman -S --noconfirm git
   - pacman -S --noconfirm
-        python
-        python-sphinx
-        python-sphinx_rtd_theme
-        python-wheel
+      git
+      python
+      python-tox
   # Build docs and packages
-  - python setup.py sdist --formats=gztar,bztar,xztar,zip bdist_wheel build_sphinx
+  - tox -e build -e docs
+  - mkdir -p build
+  - mv docs/build/html build/docs
   # Build compressed files and checksums
   - cd dist
-  - sha512sum *.tar.* *.zip *.whl > SHA512SUMS.txt
-  - b2sum *.tar.* *.zip *.whl > B2SUMS.txt
+  - |
+    find . -name "*.tar.*" -o -name "*.zip" -o -name "*.whl" | sort | xargs sha512sum > SHA512SUMS.txt
+    find . -name "*.tar.*" -o -name "*.zip" -o -name "*.whl" | sort | xargs b2sum > B2SUMS.txt
   - cd ..
   # Work out commit range for changelog
   - LAST_TAG=$(git tag --sort -version:refname | head -n2 | tail -n1)
@@ -76,7 +72,9 @@ release_gitlab:
   - if: $CI_COMMIT_TAG
   script:
   - pacman -Syu --noconfirm
-  - pacman -S --noconfirm release-cli curl
+  - pacman -S --noconfirm
+      curl
+      release-cli
   # Work out variables
   - PACKAGE_VERSION=$(echo "$CI_COMMIT_TAG" | sed -e 's/^v//')
   - PACKAGE_REGISTRY_URL="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/releases/${PACKAGE_VERSION}"
@@ -86,13 +84,13 @@ release_gitlab:
   - cd dist
   - assets=()
   - |
-    for p in *.tar.* *.zip *.whl *SUMS.txt; do
+    for p in $(find . -name "*.tar.*" -o -name "*.zip" -o -name "*.whl" -o -name "*SUMS.txt" | sort); do
       assets+=("--assets-link={\"name\":\"${p}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${p}\"}")
     done
   - echo -e "ASSETS:\n${assets[@]}"
   # Upload assets
   - |
-    for p in *.tar.* *.zip *.whl *SUMS.txt; do
+    for p in $(find . -name "*.tar.*" -o -name "*.zip" -o -name "*.whl" -o -name "*SUMS.txt" | sort); do
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file "${p}" "${PACKAGE_REGISTRY_URL}/${p}"
     done
   # Release
@@ -105,11 +103,13 @@ release_gitlab_package:
     - if: $CI_COMMIT_TAG
   script:
     - pacman -Syu --noconfirm
-    - pacman -S --noconfirm twine
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token
-        python -m twine upload
-          --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
-          dist/*.whl dist/*.tar.gz
+    - pacman -S --noconfirm
+        python-tox
+    - |
+      export TWINE_USERNAME=gitlab-ci-token
+      export TWINE_PASSWORD=${CI_JOB_TOKEN}
+      export PUBLISH_REPOSITORY=${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi
+      tox -e publish
 
 
 release_pypi:
@@ -118,13 +118,16 @@ release_pypi:
     - if: $CI_COMMIT_TAG
   script:
     - pacman -Syu --noconfirm
-    - pacman -S --noconfirm twine
+    - pacman -S --noconfirm
+        python-tox
     - |
-      if [ -n "$PYPI_TOKEN" -a -n "$PYPI_USERNAME" ]; then
+      if [ -n "$PYPI_USERNAME" -a -n "$PYPI_TOKEN" ]; then
         echo "Publishing to pypi..."
-        TWINE_PASSWORD="${PYPI_TOKEN}" TWINE_USERNAME="${PYPI_USERNAME}" python -m twine upload dist/*.whl dist/*.tar.gz
+        export TWINE_USERNAME=${PYPI_USERNAME}
+        export TWINE_PASSWORD=${PYPI_TOKEN}
+        tox -e publish
       else
-        echo "NOT Publishing to pypi: No PYPI_TOKEN or PYPI_USERNAME"
+        echo "NOT Publishing to pypi: No PYPI_USERNAME or PYPI_TOKEN"
       fi
 
 
@@ -137,7 +140,7 @@ pages:
     - pacman -Syu --noconfirm
     # Move documentation to public/
     # This is the only supported path in gitlab
-    - mv build/sphinx/html public
+    - mv build/docs public
   artifacts:
     paths:
     - public/

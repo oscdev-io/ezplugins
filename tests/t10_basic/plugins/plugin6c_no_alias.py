@@ -26,13 +26,13 @@
 import ezplugins
 
 __all__ = [
-    "Plugin6b",
+    "Plugin6c",
 ]
 
 
-@ezplugins.ezplugin_metadata(alias="plugin6")
-class Plugin6b:  # pylint: disable=too-few-public-methods
-    """Test plugin 6 with alias."""
+@ezplugins.ezplugin_metadata()
+class Plugin6c:  # pylint: disable=too-few-public-methods
+    """Test plugin 6 with no alias."""
 
     @ezplugins.ezplugin_method()
     def test_func1(self) -> str:

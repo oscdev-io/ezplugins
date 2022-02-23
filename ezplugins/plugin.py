@@ -27,6 +27,10 @@ from typing import List, Optional
 
 from .plugin_method import EZPluginMethod
 
+__all__ = [
+    "EZPlugin",
+]
+
 
 class EZPlugin:
     """

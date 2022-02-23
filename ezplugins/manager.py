@@ -29,10 +29,14 @@ import re
 import sys
 from typing import Dict, Iterator, List, Optional, Tuple
 
-from .exceptions import EZPluginMethodNotFoundException
+from .exceptions import EZPluginMethodNotFoundError
 from .plugin import EZPlugin
 from .plugin_method import EZPluginMethod
 from .plugin_module import EZPluginModule
+
+__all__ = [
+    "EZPluginManager",
+]
 
 
 class EZPluginManager:
@@ -153,7 +157,7 @@ class EZPluginManager:
 
         # If we didn't find any methods, raise an exception
         if not found_methods:
-            raise EZPluginMethodNotFoundException(method_name=where_name, plugin_name=from_plugin)
+            raise EZPluginMethodNotFoundError(method_name=where_name, plugin_name=from_plugin)
 
         # Loop with the ordered methods
         for method, plugin in sorted(found_methods.items(), key=lambda x: x[0].order):
@@ -187,7 +191,7 @@ class EZPluginManager:
 
         return plugin_set
 
-    def load_package(self, package_name: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_package(self, package_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Recursively search the package package_name and retrieve all plugins.
 
@@ -235,10 +239,14 @@ class EZPluginManager:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
-            logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+            logging.debug(
+                "Adding plugin module: %s (%s plugins)",
+                plugin_module.module_name,
+                len(plugin_module.plugins),
+            )
             self._modules.append(plugin_module)
 
-    def load_module(self, module_name: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_module(self, module_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Load plugins from a module.
 
@@ -269,10 +277,14 @@ class EZPluginManager:
             logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
             return
         # Add to the plugin modules list
-        logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+        logging.debug(
+            "Adding plugin module: %s (%s plugins)",
+            plugin_module.module_name,
+            len(plugin_module.plugins),
+        )
         self._modules.append(plugin_module)
 
-    def load_modules(self, matching: str) -> None:  # noqa: C901, pylint: disable=too-many-branches
+    def load_modules(self, matching: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Load plugins from modules matching a regex.
 
@@ -307,7 +319,11 @@ class EZPluginManager:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
-            logging.debug("Adding plugin module: %s (%s plugins)", plugin_module.module_name, len(plugin_module.plugins))
+            logging.debug(
+                "Adding plugin module: %s (%s plugins)",
+                plugin_module.module_name,
+                len(plugin_module.plugins),
+            )
             self._modules.append(plugin_module)
 
     #

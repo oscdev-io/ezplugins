@@ -23,6 +23,10 @@
 
 """EZPlugins tests - Plugins for tests."""
 
+__all__ = [
+    "NonPlugin",
+]
+
 
 class NonPlugin:  # pylint: disable=too-few-public-methods
     """Test non plugin."""
