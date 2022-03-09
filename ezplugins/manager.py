@@ -222,7 +222,7 @@ class EZPluginManager:
 
         """
 
-        logging.debug("Finding plugins in package '%s'", package_name)
+        logging.debug("EZPLUGINS => Finding plugins in package '%s'", package_name)
 
         if ignore_errors:
             try:
@@ -258,11 +258,11 @@ class EZPluginManager:
                 plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS => Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
@@ -290,17 +290,17 @@ class EZPluginManager:
 
         """
 
-        logging.debug("Finding plugins in module '%s'", module_name)
+        logging.debug("EZPLUGINS => Finding plugins in module '%s'", module_name)
 
         # Grab plugin module
         plugin_module = EZPluginModule(module_name)
         # If we loaded OK and don't have plugins, don't add to the plugin modules list
         if not plugin_module.plugins:
-            logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+            logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
             return
         # Add to the plugin modules list
         logging.debug(
-            "Adding plugin module: %s (%s plugins)",
+            "EZPLUGINS => Adding plugin module: %s (%s plugins)",
             plugin_module.module_name,
             len(plugin_module.plugins),
         )
@@ -334,7 +334,7 @@ class EZPluginManager:
 
         """
 
-        logging.debug("Finding plugins in modules matching '%s'", matching)
+        logging.debug("EZPLUGINS => Finding plugins in modules matching '%s'", matching)
 
         for module_name in sys.modules.copy():
             # Skip modules that don't match
