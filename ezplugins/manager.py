@@ -27,7 +27,7 @@ import logging
 import pkgutil
 import re
 import sys
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Dict, Generator, Iterator, List, Optional, Set, Tuple
 
 from .exceptions import EZPluginMethodNotFoundError
 from .plugin import EZPlugin
@@ -336,7 +336,7 @@ class EZPluginManager:
 
         logging.debug("EZPLUGINS => Finding plugins in modules matching '%s'", matching)
 
-        for module_name in sys.modules.copy():
+        for _, module_name, _ in self._walk_packages():
             # Skip modules that don't match
             if not re.match(matching, module_name):
                 continue
@@ -351,15 +351,55 @@ class EZPluginManager:
                 plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS => Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
             self._modules.append(plugin_module)
+
+    def _walk_packages(self, path: Optional[List[str]] = None, prefix: str = "") -> Generator[pkgutil.ModuleInfo, None, None]:
+        """
+        Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
+
+        Parameters
+        ----------
+        path : :class:`Optional`[:class:`str`]
+            Should be either None or a list of paths to look for modules in.
+
+        prefix : :class:`str`
+            A string to output on the front of every module name.
+
+        """
+
+        def _seen(check_path: str, path_list: Set[str]) -> bool:
+            if check_path in path_list:
+                return True  # pragma: no cover
+            path_list.add(check_path)
+            return False
+
+        # Paths we've seen
+        seen_paths: Set[str] = set()
+
+        for info in pkgutil.iter_modules(path, prefix):
+            yield info
+
+            if info.ispkg:
+                try:
+                    __import__(info.name)
+                except Exception as exc:  # pylint: disable=broad-except
+                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", info.name, exc)
+                    continue
+
+                path = getattr(sys.modules[info.name], "__path__", None) or []
+
+                # don't traverse path items we've seen before
+                paths = [x for x in path if not _seen(x, seen_paths)]
+
+                yield from self._walk_packages(paths, info.name + ".")
 
     #
     # Properties
