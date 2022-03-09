@@ -191,7 +191,9 @@ class EZPluginManager:
 
         return plugin_set
 
-    def load_package(self, package_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
+    def load_package(  # pylint: disable=too-many-branches # noqa: C901
+        self, package_name: str, ignore_errors: bool = False
+    ) -> None:
         """
         Recursively search the package package_name and retrieve all plugins.
 
@@ -207,16 +209,29 @@ class EZPluginManager:
             plugin_manager.load_package("mypackage.plugins")
             plugin_manager.load_package("mypackage2.plugins")
 
+            # Errors can be ignored while loading a package by using
+            plugin_manager.load_package("mypackage3.plugins", ignore_errors=True)
+
         Parameters
         ----------
         package_name : :class:`str`
             Package to load plugins from.
 
+        ignore_errors : :class:`bool`
+            Ignore errors in modules that we try to load.
+
         """
 
         logging.debug("Finding plugins in package '%s'", package_name)
 
-        package = EZPluginModule(package_name)
+        if ignore_errors:
+            try:
+                package = EZPluginModule(package_name)
+            except Exception as exc:  # pylint: disable=W0703
+                logging.debug("EZPLUGINS => Ignoring plugins in package '%s': %s", package_name, exc)
+                return
+        else:
+            package = EZPluginModule(package_name)
 
         # Add base package module, but only if it has plugins
         if package.plugins:
@@ -230,10 +245,17 @@ class EZPluginManager:
         for _, module_name, ispkg in pkgutil.iter_modules(base_package_path, base_package_name + "."):
             # If this is a sub-package, we need to process it later
             if ispkg:
-                self.load_package(module_name)
+                self.load_package(module_name, ignore_errors=ignore_errors)
                 continue
             # Grab plugin module
-            plugin_module = EZPluginModule(module_name)
+            if ignore_errors:
+                try:
+                    plugin_module = EZPluginModule(module_name)
+                except Exception as exc:  # pylint: disable=W0703
+                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", module_name, exc)
+                    continue
+            else:
+                plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
@@ -284,7 +306,7 @@ class EZPluginManager:
         )
         self._modules.append(plugin_module)
 
-    def load_modules(self, matching: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
+    def load_modules(self, matching: str, ignore_errors: bool = False) -> None:  # pylint: disable=too-many-branches # noqa: C901
         """
         Load plugins from modules matching a regex.
 
@@ -299,10 +321,16 @@ class EZPluginManager:
             plugin_manager = ezplugins.EZPluginManager()
             plugin_manager.load_modules(r"^mypackage.plugin.")
 
+            # Errors during module load can be ignored using the following
+            plugin_manager.load_modules(r"^mypackage2.plugin.", ignore_errors=True)
+
         Parameters
         ----------
         matching : :class:`str`
             Regular expression to match modules to load.
+
+        ignore_errors : :class:`bool`
+            Ignore errors in modules that we try to load.
 
         """
 
@@ -313,7 +341,14 @@ class EZPluginManager:
             if not re.match(matching, module_name):
                 continue
             # Grab plugin module
-            plugin_module = EZPluginModule(module_name)
+            if ignore_errors:
+                try:
+                    plugin_module = EZPluginModule(module_name)
+                except Exception as exc:  # pylint: disable=W0703
+                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", module_name, exc)
+                    continue
+            else:
+                plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
                 logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
