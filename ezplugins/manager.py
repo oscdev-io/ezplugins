@@ -228,7 +228,7 @@ class EZPluginManager:
             try:
                 package = EZPluginModule(package_name)
             except Exception as exc:  # pylint: disable=W0703
-                logging.debug("EZPLUGINS => Ignoring plugins in package '%s': %s", package_name, exc)
+                logging.debug("EZPLUGINS =>   - Failed loading package '%s': Exception, %s", package_name, exc)
                 return
         else:
             package = EZPluginModule(package_name)
@@ -252,17 +252,17 @@ class EZPluginManager:
                 try:
                     plugin_module = EZPluginModule(module_name)
                 except Exception as exc:  # pylint: disable=W0703
-                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", module_name, exc)
+                    logging.debug("EZPLUGINS =>   - Failed loading plugin module '%s': Exception, %s", module_name, exc)
                     continue
             else:
                 plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "EZPLUGINS => Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
@@ -296,11 +296,11 @@ class EZPluginManager:
         plugin_module = EZPluginModule(module_name)
         # If we loaded OK and don't have plugins, don't add to the plugin modules list
         if not plugin_module.plugins:
-            logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+            logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
             return
         # Add to the plugin modules list
         logging.debug(
-            "EZPLUGINS => Adding plugin module: %s (%s plugins)",
+            "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
             plugin_module.module_name,
             len(plugin_module.plugins),
         )
@@ -342,7 +342,7 @@ class EZPluginManager:
                 try:
                     plugin_module = EZPluginModule(module_name)
                 except Exception as exc:  # pylint: disable=W0703
-                    logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': Exception, %s", module_name, exc)
+                    logging.debug("EZPLUGINS =>   - Failed loading plugin module '%s': Exception, %s", module_name, exc)
                     continue
             else:
                 plugin_module = EZPluginModule(module_name)
