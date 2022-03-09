@@ -94,7 +94,7 @@ class EZPluginModule:
             # Save plugin
             self._plugins.append(EZPlugin(plugin_class()))
             logging.debug(
-                "EZPlugin loaded from '%s', class '%s'",
+                "EZPLUGINS =>   - Loaded from '%s', class '%s'",
                 self.module_name,
                 plugin_class.__name__,
             )

@@ -342,17 +342,17 @@ class EZPluginManager:
                 try:
                     plugin_module = EZPluginModule(module_name)
                 except Exception as exc:  # pylint: disable=W0703
-                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", module_name, exc)
+                    logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': Exception, %s", module_name, exc)
                     continue
             else:
                 plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "EZPLUGINS => Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
@@ -389,7 +389,7 @@ class EZPluginManager:
         for info in pkgutil.iter_modules(path, prefix):
             # Skip items that don't match
             if not re.match(matching, info.name):
-                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No match", info.name)
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No match", info.name)
                 continue
 
             # Yeild the module
@@ -400,7 +400,7 @@ class EZPluginManager:
                 try:
                     __import__(info.name)
                 except Exception as exc:  # pylint: disable=broad-except
-                    logging.debug("EZPLUGINS => Ignoring plugin module '%s': %s", info.name, exc)
+                    logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': Exception, %s", info.name, exc)
                     continue
 
                 path = getattr(sys.modules[info.name], "__path__", None) or []
