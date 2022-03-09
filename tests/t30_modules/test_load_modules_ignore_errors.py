@@ -23,7 +23,7 @@
 
 """EZPlugins tests."""
 
-from typing import Dict
+from typing import Dict, List
 
 import ezplugins
 
@@ -43,9 +43,24 @@ class TestLoadModulesFunctionalityWithIgnoreErrors(BaseTest):
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_modules(r"^tests\.t30_modules\.plugins_with_exception\.", ignore_errors=True)
+        self.data["plugins"].load_modules(r"^tests($|(\.t30_modules($|\.plugins_with_exception($|\.))))", ignore_errors=True)
 
-        expected_modules = ["tests.t30_modules.plugins_with_exception.plugin2"]
+        expected_modules = [
+            "tests.t30_modules.plugins_with_exception",
+            "tests.t30_modules.plugins_with_exception.plugin2",
+        ]
+
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
+
+        assert received_modules == expected_modules, "All plugins did not get loaded"
+
+    def test_module_load_with_walk_exception(self) -> None:
+        """Test loading of plugins."""
+        self.data["plugins"] = ezplugins.EZPluginManager()
+
+        self.data["plugins"].load_modules(r"^tests($|(\.t30_modules($|\.plugins_with_walk_exception($|\.))))", ignore_errors=True)
+
+        expected_modules: List[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 

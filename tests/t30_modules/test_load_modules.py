@@ -43,7 +43,7 @@ class TestLoadModulesFunctionality(BaseTest):
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_modules(r"^tests\.t30_modules\.plugins(\.|$)")
+        self.data["plugins"].load_modules(r"^tests($|\.t30_modules($|\.plugins($|\.)))")
 
         expected_modules = [
             "tests.t30_modules.plugins",
@@ -59,7 +59,7 @@ class TestLoadModulesFunctionality(BaseTest):
         """Test loading of blank plugin."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_modules(r"^tests\.t30_modules\.plugins_blank")
+        self.data["plugins"].load_modules(r"^tests($|\.t30_modules($|\.plugins_blank($|\.)))")
 
         expected_modules: List[str] = []
 

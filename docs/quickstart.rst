@@ -164,14 +164,17 @@ modules), and falls back to attempting an import::
    plugin_manager = ezplugins.EZPluginManager()
    plugin_manager.load_module("mypackage.plugin")
 
-All plugin modules matching a regex can also be loaded, these modules are searched in the system module list first (which includes
-already-loaded modules)::
+All plugin modules matching a regex can also be loaded, it is important to note that the regex must match ALL components
+of the module path. Everything that matches WILL be loaded and executed. Check the below examples::
 
    import ezplugins
 
    # Load plugins from mypackage.plugin
    plugin_manager = ezplugins.EZPluginManager()
-   plugin_manager.load_modules(r"^mypackage.plugin.")
+   plugin_manager.load_modules(r"^mypackage($|\.plugins($|\.))")
+
+   # Errors during module load can be ignored using the following
+   plugin_manager.load_modules(r"^mypackage2($|\.plugins($|\.))", ignore_errors=True)
 
 
 Calling Plugins

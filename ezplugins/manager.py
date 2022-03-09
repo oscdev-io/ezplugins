@@ -307,22 +307,22 @@ class EZPluginManager:
         self._modules.append(plugin_module)
 
     def load_modules(self, matching: str, ignore_errors: bool = False) -> None:  # pylint: disable=too-many-branches # noqa: C901
-        """
+        r"""
         Load plugins from modules matching a regex.
 
         Classes ending in "Base" are excluded.
 
-        All plugin modules matching a regex can also be loaded, these modules are searched in the system module list first
-        (which includes already-loaded modules)::
+        All plugin modules matching a regex can also be loaded, it is important to note that the regex must match ALL components
+        of the module path. Everything that matches WILL be loaded and executed. Check the below examples::
 
             import ezplugins
 
             # Load plugins from mypackage.plugin
             plugin_manager = ezplugins.EZPluginManager()
-            plugin_manager.load_modules(r"^mypackage.plugin.")
+            plugin_manager.load_modules(r"^mypackage($|\.plugins($|\.))")
 
             # Errors during module load can be ignored using the following
-            plugin_manager.load_modules(r"^mypackage2.plugin.", ignore_errors=True)
+            plugin_manager.load_modules(r"^mypackage2($|\.plugins($|\.))", ignore_errors=True)
 
         Parameters
         ----------
@@ -336,10 +336,7 @@ class EZPluginManager:
 
         logging.debug("EZPLUGINS => Finding plugins in modules matching '%s'", matching)
 
-        for _, module_name, _ in self._walk_packages():
-            # Skip modules that don't match
-            if not re.match(matching, module_name):
-                continue
+        for _, module_name, _ in self._walk_packages(matching):
             # Grab plugin module
             if ignore_errors:
                 try:
@@ -361,12 +358,17 @@ class EZPluginManager:
             )
             self._modules.append(plugin_module)
 
-    def _walk_packages(self, path: Optional[List[str]] = None, prefix: str = "") -> Generator[pkgutil.ModuleInfo, None, None]:
+    def _walk_packages(
+        self, matching: str, path: Optional[List[str]] = None, prefix: str = ""
+    ) -> Generator[pkgutil.ModuleInfo, None, None]:
         """
         Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
 
         Parameters
         ----------
+        matching : :class:`str`
+            Path to match.
+
         path : :class:`Optional`[:class:`str`]
             Should be either None or a list of paths to look for modules in.
 
@@ -385,8 +387,15 @@ class EZPluginManager:
         seen_paths: Set[str] = set()
 
         for info in pkgutil.iter_modules(path, prefix):
+            # Skip items that don't match
+            if not re.match(matching, info.name):
+                logging.debug("EZPLUGINS => Ignoring plugin module '%s': No match", info.name)
+                continue
+
+            # Yeild the module
             yield info
 
+            # If it is a package, dig deeper
             if info.ispkg:
                 try:
                     __import__(info.name)
@@ -399,7 +408,7 @@ class EZPluginManager:
                 # don't traverse path items we've seen before
                 paths = [x for x in path if not _seen(x, seen_paths)]
 
-                yield from self._walk_packages(paths, info.name + ".")
+                yield from self._walk_packages(matching, paths, info.name + ".")
 
     #
     # Properties
