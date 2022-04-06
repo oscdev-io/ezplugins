@@ -30,34 +30,35 @@ import ezplugins
 from ..base import BaseTest
 
 __all__ = [
-    "TestLoadModuleFunctionality",
+    "TestLoadModulesFunctionalityWithIgnoreErrors",
 ]
 
 
-class TestLoadModuleFunctionality(BaseTest):
+class TestLoadModulesFunctionalityWithIgnoreErrors(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_module_load(self) -> None:
+    def test_module_load_with_ignore_errors(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_module("tests.t30_modules.plugins.plugin1")
+        self.data["plugins"].load_modules(r"^tests($|(\.t30_modules($|\.plugins_with_exception($|\.))))", ignore_errors=True)
 
         expected_modules = [
-            "tests.t30_modules.plugins.plugin1",
+            "tests.t30_modules.plugins_with_exception",
+            "tests.t30_modules.plugins_with_exception.plugin2",
         ]
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 
         assert received_modules == expected_modules, "All plugins did not get loaded"
 
-    def test_load_blank_module(self) -> None:
-        """Test loading of blank plugin."""
+    def test_module_load_with_walk_exception(self) -> None:
+        """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_module("tests.t30_modules.plugins_blank")
+        self.data["plugins"].load_modules(r"^tests($|(\.t30_modules($|\.plugins_with_walk_exception($|\.))))", ignore_errors=True)
 
         expected_modules: List[str] = []
 

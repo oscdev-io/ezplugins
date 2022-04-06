@@ -43,11 +43,7 @@ class TestLoadModulesFunctionality(BaseTest):
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        import tests.t30_modules.plugins  # pylint: disable=import-outside-toplevel,unused-import
-        import tests.t30_modules.plugins.plugin1  # pylint: disable=import-outside-toplevel,unused-import
-        import tests.t30_modules.plugins.plugin2  # pylint: disable=import-outside-toplevel,unused-import # noqa: F401
-
-        self.data["plugins"].load_modules(r"^tests.t30_modules.plugins")
+        self.data["plugins"].load_modules(r"^tests($|\.t30_modules($|\.plugins($|\.)))")
 
         expected_modules = [
             "tests.t30_modules.plugins",
@@ -63,9 +59,7 @@ class TestLoadModulesFunctionality(BaseTest):
         """Test loading of blank plugin."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        import tests.t30_modules.plugins_blank  # noqa pylint: disable=import-outside-toplevel,unused-import
-
-        self.data["plugins"].load_modules(r"^tests.t30_modules.plugins_blank")
+        self.data["plugins"].load_modules(r"^tests($|\.t30_modules($|\.plugins_blank($|\.)))")
 
         expected_modules: List[str] = []
 

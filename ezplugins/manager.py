@@ -27,7 +27,7 @@ import logging
 import pkgutil
 import re
 import sys
-from typing import Dict, Iterator, List, Optional, Tuple
+from typing import Dict, Generator, Iterator, List, Optional, Set, Tuple
 
 from .exceptions import EZPluginMethodNotFoundError
 from .plugin import EZPlugin
@@ -191,7 +191,9 @@ class EZPluginManager:
 
         return plugin_set
 
-    def load_package(self, package_name: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
+    def load_package(  # pylint: disable=too-many-branches # noqa: C901
+        self, package_name: str, ignore_errors: bool = False
+    ) -> None:
         """
         Recursively search the package package_name and retrieve all plugins.
 
@@ -207,16 +209,29 @@ class EZPluginManager:
             plugin_manager.load_package("mypackage.plugins")
             plugin_manager.load_package("mypackage2.plugins")
 
+            # Errors can be ignored while loading a package by using
+            plugin_manager.load_package("mypackage3.plugins", ignore_errors=True)
+
         Parameters
         ----------
         package_name : :class:`str`
             Package to load plugins from.
 
+        ignore_errors : :class:`bool`
+            Ignore errors in modules that we try to load.
+
         """
 
-        logging.debug("Finding plugins in package '%s'", package_name)
+        logging.debug("EZPLUGINS => Finding plugins in package '%s'", package_name)
 
-        package = EZPluginModule(package_name)
+        if ignore_errors:
+            try:
+                package = EZPluginModule(package_name)
+            except Exception as exc:  # pylint: disable=W0703
+                logging.debug("EZPLUGINS =>   - Failed loading package '%s': Exception, %s", package_name, exc)
+                return
+        else:
+            package = EZPluginModule(package_name)
 
         # Add base package module, but only if it has plugins
         if package.plugins:
@@ -230,17 +245,24 @@ class EZPluginManager:
         for _, module_name, ispkg in pkgutil.iter_modules(base_package_path, base_package_name + "."):
             # If this is a sub-package, we need to process it later
             if ispkg:
-                self.load_package(module_name)
+                self.load_package(module_name, ignore_errors=ignore_errors)
                 continue
             # Grab plugin module
-            plugin_module = EZPluginModule(module_name)
+            if ignore_errors:
+                try:
+                    plugin_module = EZPluginModule(module_name)
+                except Exception as exc:  # pylint: disable=W0703
+                    logging.debug("EZPLUGINS =>   - Failed loading plugin module '%s': Exception, %s", module_name, exc)
+                    continue
+            else:
+                plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
@@ -268,63 +290,125 @@ class EZPluginManager:
 
         """
 
-        logging.debug("Finding plugins in module '%s'", module_name)
+        logging.debug("EZPLUGINS => Finding plugins in module '%s'", module_name)
 
         # Grab plugin module
         plugin_module = EZPluginModule(module_name)
         # If we loaded OK and don't have plugins, don't add to the plugin modules list
         if not plugin_module.plugins:
-            logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+            logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
             return
         # Add to the plugin modules list
         logging.debug(
-            "Adding plugin module: %s (%s plugins)",
+            "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
             plugin_module.module_name,
             len(plugin_module.plugins),
         )
         self._modules.append(plugin_module)
 
-    def load_modules(self, matching: str) -> None:  # pylint: disable=too-many-branches # noqa: C901
-        """
+    def load_modules(self, matching: str, ignore_errors: bool = False) -> None:  # pylint: disable=too-many-branches # noqa: C901
+        r"""
         Load plugins from modules matching a regex.
 
         Classes ending in "Base" are excluded.
 
-        All plugin modules matching a regex can also be loaded, these modules are searched in the system module list first
-        (which includes already-loaded modules)::
+        All plugin modules matching a regex can also be loaded, it is important to note that the regex must match ALL components
+        of the module path. Everything that matches WILL be loaded and executed. Check the below examples::
 
             import ezplugins
 
             # Load plugins from mypackage.plugin
             plugin_manager = ezplugins.EZPluginManager()
-            plugin_manager.load_modules(r"^mypackage.plugin.")
+            plugin_manager.load_modules(r"^mypackage($|\.plugins($|\.))")
+
+            # Errors during module load can be ignored using the following
+            plugin_manager.load_modules(r"^mypackage2($|\.plugins($|\.))", ignore_errors=True)
 
         Parameters
         ----------
         matching : :class:`str`
             Regular expression to match modules to load.
 
+        ignore_errors : :class:`bool`
+            Ignore errors in modules that we try to load.
+
         """
 
-        logging.debug("Finding plugins in modules matching '%s'", matching)
+        logging.debug("EZPLUGINS => Finding plugins in modules matching '%s'", matching)
 
-        for module_name in sys.modules.copy():
-            # Skip modules that don't match
-            if not re.match(matching, module_name):
-                continue
+        for _, module_name, _ in self._walk_packages(matching):
             # Grab plugin module
-            plugin_module = EZPluginModule(module_name)
+            if ignore_errors:
+                try:
+                    plugin_module = EZPluginModule(module_name)
+                except Exception as exc:  # pylint: disable=W0703
+                    logging.debug("EZPLUGINS =>   - Failed loading plugin module '%s': Exception, %s", module_name, exc)
+                    continue
+            else:
+                plugin_module = EZPluginModule(module_name)
             # If we loaded OK and don't have plugins, don't add to the plugin modules list
             if not plugin_module.plugins:
-                logging.debug("Ignoring plugin module '%s': No plugins", plugin_module.module_name)
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No plugins", plugin_module.module_name)
                 continue
             # Add to the plugin modules list
             logging.debug(
-                "Adding plugin module: %s (%s plugins)",
+                "EZPLUGINS =>   - Adding plugin module: %s (%s plugins)",
                 plugin_module.module_name,
                 len(plugin_module.plugins),
             )
             self._modules.append(plugin_module)
+
+    def _walk_packages(
+        self, matching: str, path: Optional[List[str]] = None, prefix: str = ""
+    ) -> Generator[pkgutil.ModuleInfo, None, None]:
+        """
+        Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
+
+        Parameters
+        ----------
+        matching : :class:`str`
+            Path to match.
+
+        path : :class:`Optional`[:class:`str`]
+            Should be either None or a list of paths to look for modules in.
+
+        prefix : :class:`str`
+            A string to output on the front of every module name.
+
+        """
+
+        def _seen(check_path: str, path_list: Set[str]) -> bool:
+            if check_path in path_list:
+                return True  # pragma: no cover
+            path_list.add(check_path)
+            return False
+
+        # Paths we've seen
+        seen_paths: Set[str] = set()
+
+        for info in pkgutil.iter_modules(path, prefix):
+            # Skip items that don't match
+            if not re.match(matching, info.name):
+                logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': No match", info.name)
+                continue
+
+            # Yeild the module
+            yield info
+
+            # If it is a package, dig deeper
+            if info.ispkg:
+                try:
+                    __import__(info.name)
+                except Exception as exc:  # pylint: disable=broad-except
+                    logging.debug("EZPLUGINS =>   - Ignoring plugin module '%s': Exception, %s", info.name, exc)
+                    continue
+
+                path = getattr(sys.modules[info.name], "__path__", None) or []
+
+                # don't traverse path items we've seen before
+                paths = [x for x in path if not _seen(x, seen_paths)]
+
+                yield from self._walk_packages(matching, paths, info.name + ".")
 
     #
     # Properties

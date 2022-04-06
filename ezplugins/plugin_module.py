@@ -78,7 +78,7 @@ class EZPluginModule:
         self._module_name = module_name
         self._plugins = []
 
-        logging.debug("EZPLUGINS => MODULE NAME: %s", module_name)
+        logging.debug("EZPLUGINS =>   - Loading module: %s", module_name)
 
         # Check if module is loaded and import if it's not
         module = sys.modules.get(module_name, importlib.import_module(module_name))
@@ -94,7 +94,7 @@ class EZPluginModule:
             # Save plugin
             self._plugins.append(EZPlugin(plugin_class()))
             logging.debug(
-                "EZPlugin loaded from '%s', class '%s'",
+                "EZPLUGINS =>   - Loaded from '%s', class '%s'",
                 self.module_name,
                 plugin_class.__name__,
             )

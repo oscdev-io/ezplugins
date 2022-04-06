@@ -21,19 +21,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""EZPlugins package."""
+# type: ignore
+
+"""EZPlugins tests - Plugins for tests."""
+
+import ezplugins
 
 __all__ = [
-    "EZPluginError",
-    "EZPluginMethodNotFoundError",
-    "ezplugin",
-    "ezplugin_metadata",
-    "ezplugin_method",
-    "EZPluginManager",
+    "Plugin1",
 ]
 
-from .decorators import ezplugin, ezplugin_metadata, ezplugin_method
-from .exceptions import EZPluginError, EZPluginMethodNotFoundError
-from .manager import EZPluginManager
 
-__version__ = "1.3.2"
+@ezplugins.ezplugin
+class Plugin1:  # pylint: disable=too-few-public-methods
+    """Test plugin 1."""
+
+    @ezplugins.ezplugin_method
+    def test_func1(self) -> str:
+        """Test function."""
+        return f"{self.__module__}.{__name__}#{self.__class__.__name__}"

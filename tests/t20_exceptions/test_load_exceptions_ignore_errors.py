@@ -30,37 +30,35 @@ import ezplugins
 from ..base import BaseTest
 
 __all__ = [
-    "TestLoadModuleFunctionality",
+    "TestLoadExceptionsWithIgnoreErrors",
 ]
 
 
-class TestLoadModuleFunctionality(BaseTest):
+class TestLoadExceptionsWithIgnoreErrors(BaseTest):
     """Test basic functionality of EZPlugins."""
 
     data: Dict[str, ezplugins.EZPluginManager] = {}
 
-    def test_module_load(self) -> None:
+    def test_plugin_package_with_exception(self) -> None:
         """Test loading of plugins."""
         self.data["plugins"] = ezplugins.EZPluginManager()
 
-        self.data["plugins"].load_module("tests.t30_modules.plugins.plugin1")
-
-        expected_modules = [
-            "tests.t30_modules.plugins.plugin1",
-        ]
-
-        received_modules = [x.module_name for x in self.data["plugins"].modules]
-
-        assert received_modules == expected_modules, "All plugins did not get loaded"
-
-    def test_load_blank_module(self) -> None:
-        """Test loading of blank plugin."""
-        self.data["plugins"] = ezplugins.EZPluginManager()
-
-        self.data["plugins"].load_module("tests.t30_modules.plugins_blank")
+        self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions.plugin1"), ignore_errors=True)
 
         expected_modules: List[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 
-        assert received_modules == expected_modules, "All plugins did not get loaded"
+        assert received_modules == expected_modules, "Plugins did not return correct load status"
+
+    def test_plugin_package_with_subplugin_exception(self) -> None:
+        """Test loading of plugins."""
+        self.data["plugins"] = ezplugins.EZPluginManager()
+
+        self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions"), ignore_errors=True)
+
+        expected_modules: List[str] = []
+
+        received_modules = [x.module_name for x in self.data["plugins"].modules]
+
+        assert received_modules == expected_modules, "Plugins did not return correct load status"
