@@ -36,4 +36,4 @@ from .decorators import ezplugin, ezplugin_metadata, ezplugin_method
 from .exceptions import EZPluginError, EZPluginMethodNotFoundError
 from .manager import EZPluginManager
 
-__version__ = "1.3.3"
+__version__ = "1.3.4"
