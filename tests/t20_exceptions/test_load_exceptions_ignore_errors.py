@@ -23,8 +23,6 @@
 
 """EZPlugins tests."""
 
-from typing import Dict, List
-
 import ezplugins
 
 from ..base import BaseTest
@@ -37,7 +35,7 @@ __all__ = [
 class TestLoadExceptionsWithIgnoreErrors(BaseTest):
     """Test basic functionality of EZPlugins."""
 
-    data: Dict[str, ezplugins.EZPluginManager] = {}
+    data: dict[str, ezplugins.EZPluginManager] = {}
 
     def test_plugin_package_with_exception(self) -> None:
         """Test loading of plugins."""
@@ -45,7 +43,7 @@ class TestLoadExceptionsWithIgnoreErrors(BaseTest):
 
         self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions.plugin1"), ignore_errors=True)
 
-        expected_modules: List[str] = []
+        expected_modules: list[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 
@@ -57,7 +55,7 @@ class TestLoadExceptionsWithIgnoreErrors(BaseTest):
 
         self.data["plugins"].load_package(self.plugin_path("plugins_load_exceptions"), ignore_errors=True)
 
-        expected_modules: List[str] = []
+        expected_modules: list[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 

@@ -61,6 +61,36 @@ ignore_missing_imports = true
 strict = true
 
 
+[tool.pylint]
+load-plugins = [
+    "pylint.extensions.broad_try_clause",
+    "pylint.extensions.code_style",
+    "pylint.extensions.emptystring",
+    "pylint.extensions.comparetozero",
+    "pylint.extensions.comparison_placement",
+    "pylint.extensions.confusing_elif",
+    "pylint.extensions.for_any_all",
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.mccabe",
+    "pylint.extensions.docstyle",
+    "pylint.extensions.check_elif",
+    "pylint.extensions.eq_without_hash",
+    "pylint.extensions.private_import",
+    "pylint.extensions.redefined_variable_type",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.overlapping_exceptions",
+    "pylint.extensions.docparams",
+    "pylint.extensions.redefined_loop_name",
+    "pylint.extensions.set_membership",
+    "pylint.extensions.typing",
+]
+
+[tool.pylint.broad_try_clause]
+max-try-statements = 5
+
 [tool.pylint.message_control]
 max-line-length = 132
-disable = "R0801"
+# C0199: First line empty in method docstring (docstring-first-line-empty)
+# R0801: Similar lines in X files
+# R6103: Use '....' instead (assignment on IF line)
+disable = "C0199,R0801,R6103"

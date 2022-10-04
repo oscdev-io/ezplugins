@@ -23,7 +23,8 @@
 
 """EZPlugins decorators."""
 
-from typing import Callable, Optional, Type, TypeVar
+from collections.abc import Callable
+from typing import TypeVar
 
 EZPT = TypeVar("EZPT")
 
@@ -34,7 +35,7 @@ __all__ = [
 ]
 
 
-def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
+def ezplugin(cls: type[EZPT]) -> type[EZPT]:
     """
     Decorate a class as being a loadable plugin.
 
@@ -62,7 +63,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
 
     """
 
-    def decorator(cls: Type[EZPT]) -> Type[EZPT]:
+    def decorator(cls: type[EZPT]) -> type[EZPT]:
         # Set class attribute, we set attr to avoid errors due to protected class changes
         setattr(cls, "_is_ezplugin", True)  # noqa: B010
         return cls
@@ -70,7 +71,7 @@ def ezplugin(cls: Type[EZPT]) -> Type[EZPT]:
     return decorator(cls)
 
 
-def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
+def ezplugin_metadata(*, alias: str | None = None) -> Callable[[EZPT], EZPT]:
     """
     Decorate a class as being a loadable plugin with metadata. See :func:`~ezplugin` for more information.
 
@@ -84,7 +85,7 @@ def ezplugin_metadata(*, alias: Optional[str] = None) -> Callable[[EZPT], EZPT]:
 
     Parameters
     ----------
-    alias : Optioanl[:class:`str`]
+    alias : :class:`str` | None
         Plugin class alias, used when one wants to call a specific plugin or set of plugins with a custom name.
         This makes it easy to specify a plugin name instead of using the fully qualified plugin name or class name. You can also
         specify the same alias for a number of plugins which will result in all of them being called when using that alias.

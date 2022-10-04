@@ -23,8 +23,6 @@
 
 """EZPlugins tests."""
 
-from typing import Dict
-
 import pytest
 
 import ezplugins
@@ -39,7 +37,7 @@ __all__ = [
 class TestPluginCallException(BaseTest):
     """Test for the case that the plugin package doesn't exist."""
 
-    data: Dict[str, ezplugins.EZPluginManager] = {}
+    data: dict[str, ezplugins.EZPluginManager] = {}
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""

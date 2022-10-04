@@ -23,8 +23,6 @@
 
 """EZPlugins plugin classes."""
 
-from typing import List, Optional
-
 from .plugin_method import EZPluginMethod
 
 __all__ = [
@@ -46,11 +44,11 @@ class EZPlugin:
     """
 
     _obj: object
-    _methods: List[EZPluginMethod]
+    _methods: list[EZPluginMethod]
     _name: str
     _path: str
     _fqn: str
-    _alias: Optional[str]
+    _alias: str | None
 
     def __init__(self, obj: object):
         """
@@ -98,13 +96,13 @@ class EZPlugin:
         return self._obj
 
     @property
-    def methods(self) -> List[EZPluginMethod]:
+    def methods(self) -> list[EZPluginMethod]:
         """
         Methods that were designated as callable within an EZPlugin.
 
         Returns
         -------
-        List[:class:`~plugin_method.EZPluginMethod`] :
+        :class:`list` [ :class:`~plugin_method.EZPluginMethod` ] :
             A list of callables.
 
         """
@@ -150,13 +148,13 @@ class EZPlugin:
         return self._path
 
     @property
-    def alias(self) -> Optional[str]:
+    def alias(self) -> str | None:
         """
         Plugin alias. This is the plugin alias which was specified by decorator.
 
         Returns
         -------
-        Optional[:class:`str`] :
+        :class:`str` | None :
             Plugin alias.
 
         """
