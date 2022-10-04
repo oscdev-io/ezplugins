@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -23,7 +23,7 @@
 
 """EZPlugins tests - Plugins for tests."""
 
-from typing import Any, Dict
+from typing import Any
 
 import ezplugins
 
@@ -37,7 +37,7 @@ class Plugin8:  # pylint: disable=too-few-public-methods
     """Test plugin 8."""
 
     @ezplugins.ezplugin_method()
-    def test_func_with_params1(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def test_func_with_params1(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         """Test function."""
         output = {
             "name": f"{self.__module__}.{__name__}#{self.__class__.__name__}",

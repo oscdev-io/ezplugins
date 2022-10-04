@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -23,8 +23,6 @@
 
 """EZPlugins tests."""
 
-from typing import Dict, List
-
 import pytest
 
 import ezplugins
@@ -39,7 +37,7 @@ __all__ = [
 class TestPackageNoExist(BaseTest):
     """Test for the case that the plugin package doesn't exist."""
 
-    data: Dict[str, ezplugins.EZPluginManager] = {}
+    data: dict[str, ezplugins.EZPluginManager] = {}
 
     def test_plugin_load(self) -> None:
         """Test loading of plugins."""
@@ -47,7 +45,7 @@ class TestPackageNoExist(BaseTest):
         with pytest.raises(ModuleNotFoundError, match="No module named 'tests.t20_exceptions.some_package_does_not_exist'"):
             self.data["plugins"].load_package(self.plugin_path("some_package_does_not_exist"))
 
-        expected_modules: List[str] = []
+        expected_modules: list[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 

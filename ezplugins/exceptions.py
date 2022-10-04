@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -23,8 +23,6 @@
 
 """EZPlugins exceptions."""
 
-from typing import Optional
-
 __all__ = [
     "EZPluginError",
     "EZPluginMethodNotFoundError",
@@ -41,28 +39,28 @@ class EZPluginMethodNotFoundError(EZPluginError):
 
     Parameters
     ----------
-    method_name : Optional[:class:`str`]
+    method_name : :class:`str` | None
         Method name.
 
-    plugin_name : Optional[:class:`str`]
+    plugin_name : :class:`str` | None
         Plugin name.
 
     """
 
-    _plugin_name: Optional[str]
-    _method_name: Optional[str]
+    _plugin_name: str | None
+    _method_name: str | None
 
-    def __init__(self, method_name: Optional[str], plugin_name: Optional[str]):
+    def __init__(self, method_name: str | None, plugin_name: str | None):
         """
         Exception raised when a plugin method or plugin is not found during a \
         :meth:`~ezplugins.manager.EZPluginManager.methods` call.
 
         Parameters
         ----------
-        method_name : Optional[:class:`str`]
+        method_name : :class:`str` | None
             Method name.
 
-        plugin_name : Optional[:class:`str`]
+        plugin_name : :class:`str` | None
             Plugin name.
 
         """
@@ -73,11 +71,11 @@ class EZPluginMethodNotFoundError(EZPluginError):
         self._method_name = method_name
 
     @property
-    def plugin_name(self) -> Optional[str]:
+    def plugin_name(self) -> str | None:
         """Plugin name if one is available."""
         return self._plugin_name
 
     @property
-    def method_name(self) -> Optional[str]:
+    def method_name(self) -> str | None:
         """Name of the method if one is available."""
         return self._method_name

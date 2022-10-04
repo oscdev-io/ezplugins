@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -23,7 +23,8 @@
 
 """EZPlugins plugin method class."""
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 __all__ = [
     "EZPluginMethod",
@@ -38,7 +39,7 @@ class EZPluginMethod:
 
     Parameters
     ----------
-    method : Callable[..., Any]
+    method : :class:`Callable` [ ..., Any ]
         Plugin method.
 
     """
@@ -53,12 +54,12 @@ class EZPluginMethod:
 
         Parameters
         ----------
-        method : Callable[..., Any]
+        method : :class:`Callable` [ ..., Any ]
             Plugin method.
 
         """
 
-        self._method = method  # type: ignore
+        self._method = method
 
     def run(self, *args: Any, **kwargs: Any) -> Any:
         """
@@ -82,7 +83,7 @@ class EZPluginMethod:
 
         Returns
         -------
-        Callable[..., Any] :
+        :class:`Callable` [ ..., Any ] :
             A callable.
 
         """

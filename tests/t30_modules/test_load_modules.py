@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -23,8 +23,6 @@
 
 """EZPlugins tests."""
 
-from typing import Dict, List
-
 import ezplugins
 
 from ..base import BaseTest
@@ -37,7 +35,7 @@ __all__ = [
 class TestLoadModulesFunctionality(BaseTest):
     """Test basic functionality of EZPlugins."""
 
-    data: Dict[str, ezplugins.EZPluginManager] = {}
+    data: dict[str, ezplugins.EZPluginManager] = {}
 
     def test_modules_load(self) -> None:
         """Test loading of plugins."""
@@ -61,7 +59,7 @@ class TestLoadModulesFunctionality(BaseTest):
 
         self.data["plugins"].load_modules(r"^tests($|\.t30_modules($|\.plugins_blank($|\.)))")
 
-        expected_modules: List[str] = []
+        expected_modules: list[str] = []
 
         received_modules = [x.module_name for x in self.data["plugins"].modules]
 

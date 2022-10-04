@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -27,7 +27,7 @@ import logging
 import pkgutil
 import re
 import sys
-from typing import Dict, Generator, Iterator, List, Optional, Set, Tuple
+from collections.abc import Generator, Iterator
 
 from .exceptions import EZPluginMethodNotFoundError
 from .plugin import EZPlugin
@@ -78,7 +78,7 @@ class EZPluginManager:
 
     """
 
-    _modules: List[EZPluginModule]
+    _modules: list[EZPluginModule]
 
     def __init__(self) -> None:
         """
@@ -97,9 +97,9 @@ class EZPluginManager:
 
     def methods(
         self,
-        where_name: Optional[str] = None,
-        from_plugin: Optional[str] = None,
-    ) -> Iterator[Tuple[EZPluginMethod, EZPlugin]]:
+        where_name: str | None = None,
+        from_plugin: str | None = None,
+    ) -> Iterator[tuple[EZPluginMethod, EZPlugin]]:
         """
         Return a generator used to iterate over plugin methods with a specific name and optionally from a specific plugin.
 
@@ -130,23 +130,28 @@ class EZPluginManager:
 
         Parameters
         ----------
-        where_name : Optional[:class:`str`]
+        where_name : :class:`str` | None
             Limit methods returned to those matching the name provided.
 
-        from_plugin : Optional[:class:`str`]
+        from_plugin : :class:`str` | None
             Limit methods returned to those belonging to a specific plugin.
 
-        Returns
-        -------
-        Iterator[Tuple[:class:`~ezplugins.plugin_method.EZPluginMethod`, :class:`~ezplugins.plugin.EZPlugin`]] :
+        Yields
+        ------
+        Iterator [ tuple [ :class:`~ezplugins.plugin_method.EZPluginMethod`, :class:`~ezplugins.plugin.EZPlugin` ] ] :
             A generator that provides tuples in the format of (:class:`~ezplugins.plugin_method.EZPluginMethod`,
             :class:`~ezplugins.plugin.EZPlugin`).
+
+        Raises
+        ------
+        EZPluginMethodNotFoundError
+            Raises :class:`EZPluginMethodNotFoundError` when plugin method is not found.
 
         """
 
         # Work out the plugins and methods we're going to call
         # Methods are unique, we'll be calling in order of method.order
-        found_methods: Dict[EZPluginMethod, EZPlugin] = {}
+        found_methods: dict[EZPluginMethod, EZPlugin] = {}
 
         # Loop with our plugins matching the provided plugin_name or None
         for plugin in [x for x in self.plugins if from_plugin in [None, x.fqn, x.name, x.alias]]:
@@ -176,7 +181,7 @@ class EZPluginManager:
 
         Returns
         -------
-        set[ :class:`~ezplugins.plugin.EZPlugin` ] :
+        :class:`set` [ :class:`~ezplugins.plugin.EZPlugin` ] :
             Set of :class:`~ezplugins.plugin.EZPlugin` objects which matches the criteria.
 
         """
@@ -191,7 +196,7 @@ class EZPluginManager:
 
         return plugin_set
 
-    def load_package(self, package_name: str, ignore_errors: bool = False) -> None:  # pylint: disable=too-many-branches
+    def load_package(self, package_name: str, ignore_errors: bool = False) -> None:  # pylint: disable=too-many-branches,too-complex
         """
         Recursively search the package package_name and retrieve all plugins.
 
@@ -357,7 +362,7 @@ class EZPluginManager:
             self._modules.append(plugin_module)
 
     def _walk_packages(
-        self, matching: str, path: Optional[List[str]] = None, prefix: str = ""
+        self, matching: str, path: list[str] | None = None, prefix: str = ""
     ) -> Generator[pkgutil.ModuleInfo, None, None]:
         """
         Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
@@ -367,22 +372,22 @@ class EZPluginManager:
         matching : :class:`str`
             Path to match.
 
-        path : :class:`Optional`[:class:`str`]
+        path : :class:`list` [ :class:`str` ] | None
             Should be either None or a list of paths to look for modules in.
 
-        prefix : :class:`str`
+        prefix : :class:`str` | None
             A string to output on the front of every module name.
 
         """
 
-        def _seen(check_path: str, path_list: Set[str]) -> bool:
+        def _seen(check_path: str, path_list: set[str]) -> bool:
             if check_path in path_list:
                 return True  # pragma: no cover
             path_list.add(check_path)
             return False
 
         # Paths we've seen
-        seen_paths: Set[str] = set()
+        seen_paths: set[str] = set()
 
         for info in pkgutil.iter_modules(path, prefix):
             # Skip items that don't match
@@ -413,13 +418,13 @@ class EZPluginManager:
     #
 
     @property
-    def modules(self) -> List[EZPluginModule]:
+    def modules(self) -> list[EZPluginModule]:
         """
         List of :class:`~EZPluginModule` modules loaded.
 
         Returns
         -------
-        List[:class:`~ezplugins.plugin_module.EZPluginModule`] :
+        :class:`list` [ :class:`~ezplugins.plugin_module.EZPluginModule` ] :
             Modules loaded during the course of finding plugins.
 
         """
@@ -427,13 +432,13 @@ class EZPluginManager:
         return self._modules
 
     @property
-    def plugins(self) -> List[EZPlugin]:
+    def plugins(self) -> list[EZPlugin]:
         """
         Return a list of plugins loaded in all modules.
 
         Returns
         -------
-        List[:class:`~ezplugins.plugin.EZPlugin`] :
+        :class:`list` [ :class:`~ezplugins.plugin.EZPlugin` ] :
             List of all plugins loaded.
 
         """

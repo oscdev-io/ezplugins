@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2021, AllWorldIT.
+# Copyright (C) 2019-2022, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -28,7 +28,6 @@ import inspect
 import logging
 import sys
 from types import ModuleType
-from typing import List
 
 from .plugin import EZPlugin
 
@@ -54,7 +53,7 @@ class EZPluginModule:
 
     _module: ModuleType
     _module_name: str
-    _plugins: List[EZPlugin]
+    _plugins: list[EZPlugin]
 
     def __init__(self, module_name: str):
         """
@@ -106,7 +105,7 @@ class EZPluginModule:
 
         Returns
         -------
-        Optional[:class:`ModuleType`] :
+        :class:`ModuleType` :
             Module that was imported (if it was imported, or None).
 
         """
@@ -126,13 +125,13 @@ class EZPluginModule:
         return self._module_name
 
     @property
-    def plugins(self) -> List[EZPlugin]:
+    def plugins(self) -> list[EZPlugin]:
         """
         Property containing a list of EZPlugin's that belong to this module.
 
         Returns
         -------
-        List[:class:`ezplugins.plugin.EZPlugin`] :
+        :class:`list` [ :class:`ezplugins.plugin.EZPlugin` ] :
             List of instantiated EZPlugin's that represent the plugin objects that were instantiated.
 
         """
