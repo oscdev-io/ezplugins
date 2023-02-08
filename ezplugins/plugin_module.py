@@ -85,8 +85,7 @@ class EZPluginModule:
         self._module = module
 
         # Loop with class names
-        for (_, plugin_class) in inspect.getmembers(self._module, inspect.isclass):
-
+        for _, plugin_class in inspect.getmembers(self._module, inspect.isclass):
             # Only add classes that were marked as EZPlugins
             if not getattr(plugin_class, "_is_ezplugin", False):
                 continue

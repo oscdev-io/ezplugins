@@ -70,6 +70,11 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
+# NK: Add custom CSS
+html_css_files = [
+    'css/custom.css',
+]
+
 # NK: Add favicon
 html_favicon = "favicon.png"
 
