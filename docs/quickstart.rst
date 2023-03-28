@@ -27,7 +27,7 @@ Loading the plugin and running the method can be done using::
    plugin_manager.load_package("mypackage.plugins")
 
    # Call the method some_func in each plugin
-   for method, _ in plugin_manager.methods(with_name="some_func"):
+   for method, _ in plugin_manager.methods(where_name="some_func"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result}")
 
@@ -189,7 +189,7 @@ The ordering of the results will depend on :ref:`quickstart:Method Ordering`.
 Taking the quickstart example, an example of running all ``some_func`` methods in all plugins can be found below::
 
    # Call the method some_func in each plugin
-   for method, _ in plugin_manager.methods(with_name="some_func"):
+   for method, _ in plugin_manager.methods(where_name="some_func"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result}")
 
@@ -205,7 +205,7 @@ One can also call every single method marked as an EZPlugins method in all plugi
 As you can see in the above examples we have a ``_`` in the ``for``, this is the EZPlugins plugin object which we didn't need::
 
    # Call the method some_func in each plugin
-   for method, plugin in plugin_manager.methods(with_name="some_func"):
+   for method, plugin in plugin_manager.methods(where_name="some_func"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")
 
@@ -213,7 +213,7 @@ As you can see in the above examples we have a ``_`` in the ``for``, this is the
 By Method Name
 --------------
 
-Plugins are generally called by method name, as seen above using the ``with_name`` keyword argument.
+Plugins are generally called by method name, as seen above using the ``where_name`` keyword argument.
 
 This can be omitted but the result will be every plugin method decorated as an EZPlugins method being called.
 
@@ -227,18 +227,18 @@ examples...
 
 Call the method some_func by specifying the fully qualified plugin name::
 
-   for method, plugin in plugin_manager.methods(with_name="some_func", from_plugin="mypackage.plugins#MyPlugin"):
+   for method, plugin in plugin_manager.methods(where_name="some_func", from_plugin="mypackage.plugins#MyPlugin"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")
 
 Call the method some_func by specifying the plugin class name::
 
-   for method, plugin in plugin_manager.methods(with_name="some_func", from_plugin="#MyPlugin"):
+   for method, plugin in plugin_manager.methods(where_name="some_func", from_plugin="#MyPlugin"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")
 
 Call the method some_func by specifying an alias::
 
-   for method, plugin in plugin_manager.methods(with_name="some_func", from_plugin="some_alias"):
+   for method, plugin in plugin_manager.methods(where_name="some_func", from_plugin="some_alias"):
       result = method.run("param1", "param2")
       print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")

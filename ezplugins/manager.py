@@ -106,7 +106,7 @@ class EZPluginManager:
         An example of running all ``some_func`` methods in all plugins can be found below::
 
             # Call the method some_func in each plugin
-            for method, _ in plugin_manager.methods(with_name="some_func"):
+            for method, _ in plugin_manager.methods(where_name="some_func"):
                 result = method.run("param1", "param2")
                 print(f"RESULT: {result}")
 
@@ -114,7 +114,7 @@ class EZPluginManager:
         object which we didn't need::
 
             # Call the method some_func in each plugin
-            for method, plugin in plugin_manager.methods(with_name="some_func"):
+            for method, plugin in plugin_manager.methods(where_name="some_func"):
                 result = method.run("param1", "param2")
                 print(f"RESULT: {result} fomr {method.name}, plugin {plugin.fqn}")
 
