@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.abspath("../"))
 from ezplugins import __version__
 
 project = "EZPlugins"
-copyright = "2019-2022, AllWorldIT"
+copyright = "2019-2024, AllWorldIT"
 author = "Nigel Kukard <nkukard@LBSD.net>"
 version = __version__
 

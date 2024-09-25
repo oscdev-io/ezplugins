@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (C) 2019-2022, AllWorldIT.
+# Copyright (C) 2019-2024, AllWorldIT.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -361,9 +361,7 @@ class EZPluginManager:
             )
             self._modules.append(plugin_module)
 
-    def _walk_packages(
-        self, matching: str, path: list[str] | None = None, prefix: str = ""
-    ) -> Generator[pkgutil.ModuleInfo, None, None]:
+    def _walk_packages(self, matching: str, path: list[str] | None = None, prefix: str = "") -> Generator[pkgutil.ModuleInfo]:
         """
         Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
 
