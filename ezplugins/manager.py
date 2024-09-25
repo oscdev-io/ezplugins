@@ -361,9 +361,7 @@ class EZPluginManager:
             )
             self._modules.append(plugin_module)
 
-    def _walk_packages(
-        self, matching: str, path: list[str] | None = None, prefix: str = ""
-    ) -> Generator[pkgutil.ModuleInfo, None, None]:
+    def _walk_packages(self, matching: str, path: list[str] | None = None, prefix: str = "") -> Generator[pkgutil.ModuleInfo]:
         """
         Yield ModuleInfo for all modules recursively on path. If path is None, all accessible modules.
 
